@@ -30,7 +30,7 @@ export function SiteFooter() {
           <FooterCol
             title="Explore"
             links={[
-              { href: "/#directory", label: "Where to shop" },
+              { href: "/directory", label: "Where to shop" },
               { href: "/#learn", label: "Learn" },
               { href: "/#community", label: "Community" },
             ]}

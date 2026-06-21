@@ -119,23 +119,25 @@ export default function Home() {
               sub="A map and list of Brooklyn markets, grocers, and farmers markets with real fresh produce — not corner stores, not “make do.” Filter by open now, distance, and what’s good there."
               align="left"
             />
-            <Link href="#" className="btn-primary mt-6 inline-flex">
+            <Link href="/directory" className="btn-primary mt-6 inline-flex">
               Browse the directory
             </Link>
           </div>
-          <div className="card">
-            <div className="grid h-56 place-items-center rounded-xl bg-cream text-center">
+          <Link
+            href="/directory"
+            className="card block transition hover:-translate-y-0.5 hover:shadow-lift"
+          >
+            <div className="grid h-56 place-items-center rounded-xl bg-gradient-to-br from-teal-100 to-gold-100 text-center">
               <div>
                 <p className="font-display text-lg font-bold text-ink">
                   🗺️ Map of healthy spots
                 </p>
                 <p className="mt-1 text-sm text-muted">
-                  Curated, verified Brooklyn places — coming in the next build
-                  step.
+                  Tap to explore markets, grocers & farmers markets near you.
                 </p>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 

@@ -7,7 +7,7 @@ import { MobileNav } from "./mobile-nav";
 /** Primary nav. Anchors to homepage sections until the feature pages ship. */
 export const NAV_LINKS = [
   { href: "/#tools", label: "Tools" },
-  { href: "/#directory", label: "Where to shop" },
+  { href: "/directory", label: "Where to shop" },
   { href: "/#learn", label: "Learn" },
   { href: "/#community", label: "Community" },
 ];

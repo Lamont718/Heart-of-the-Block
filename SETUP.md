@@ -52,6 +52,31 @@ disclaimer modal shows, but sign-in is disabled until you connect Supabase.
 - **Inline variant**: drop `<DisclaimerBanner variant="inline" />` onto any tool
   that touches personal health (already on `/account`).
 
+## The Directory (step 2) — how it works & how to seed it
+
+- Page: `/directory`. Map (Leaflet + free OpenStreetMap/CARTO tiles — no Google
+  billing), list, and filters: search, category, **open now**, **has fresh
+  produce**, and **distance** (after "Near me" shares location). Map ↔ list stay
+  in sync; mobile gets a List/Map toggle.
+- **Data source:** reads the `directory_listings` table when Supabase is
+  configured AND has rows; otherwise it shows the labelled **placeholder seed**
+  (`src/data/directory-seed.ts`) so the UI is reviewable. Placeholders are pinned
+  to neighborhood centers, named "Sample —", and flagged with a banner.
+
+### Seeding real listings (do NOT invent — per CONTEXT)
+
+1. Put your real, verified spots in a JSON array (`name`, `address`, `category`
+   one of grocer|market|health_food_store|farmers_market, `highlights`, `tags`,
+   `hours`). Use the tag `fresh-produce` to power the "has fresh produce" filter.
+2. **Geocode addresses → lat/lng:**
+   ```bash
+   node scripts/geocode-listings.mjs my-listings.json > geocoded.json
+   ```
+   (Uses free OSM Nominatim, ~1 req/sec.)
+3. Insert `geocoded.json` rows into `directory_listings` (Supabase Table editor,
+   or a SQL insert / CSV import). Set `verified = true` for confirmed spots.
+4. The directory revalidates hourly, so new rows appear without a redeploy.
+
 ## Deploy (Vercel)
 
 Set the three env vars in the Vercel project, set `NEXT_PUBLIC_SITE_URL` to the
