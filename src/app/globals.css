@@ -2,26 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Heart of the Block — brand tokens
+   Warm, vibrant, community-rooted. Light-only by design so the
+   brand reads consistently in any lighting / on any cheap phone.
+   ============================================================ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  /* Colours as "R G B" triplets so Tailwind /opacity modifiers work.
+     Use rgb(var(--x)) when you need a raw colour in plain CSS. */
+
+  /* Surfaces */
+  --cream-rgb: 251 246 238; /* warm paper background */
+  --surface-rgb: 255 255 255; /* cards */
+  --ink-rgb: 33 26 21; /* warm near-black text — AA on cream */
+  --muted-rgb: 107 93 82; /* secondary text — ~5.2:1 on cream */
+  --line-rgb: 236 226 212; /* hairline borders */
+
+  /* Brand */
+  --brick-rgb: 194 58 34; /* heart red — white text ~5:1 */
+  --brick-700-rgb: 158 45 24; /* darker red for text/hover — ~6.4:1 on cream */
+  --brick-100-rgb: 251 228 221; /* tint */
+  --gold-rgb: 224 146 47; /* warm amber accent */
+  --gold-100-rgb: 251 236 207;
+  --teal-rgb: 31 122 107; /* fresh produce green-teal */
+  --teal-100-rgb: 214 239 233;
+
+  /* Health-score scale (good / okay / limit) */
+  --good-rgb: 31 122 77;
+  --okay-rgb: 181 121 28;
+  --limit-rgb: 194 58 34;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: rgb(var(--line-rgb));
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background: rgb(var(--cream-rgb));
+  color: rgb(var(--ink-rgb));
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Generous, accessible focus ring everywhere */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid rgb(var(--brick-rgb));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), Georgia, serif;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Layout container */
+  .container-block {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons — min 44px tap target for accessibility */
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-base font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-brick text-white shadow-lift hover:bg-brick-700;
+  }
+  .btn-secondary {
+    @apply btn border border-line bg-surface text-ink hover:bg-cream;
+  }
+  .btn-ghost {
+    @apply btn text-brick-700 hover:bg-brick-100;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-2xl border border-line bg-surface p-6 shadow-card;
+  }
+
+  /* Form fields */
+  .field {
+    @apply min-h-[48px] w-full rounded-xl border border-line bg-surface px-4 text-base text-ink placeholder:text-muted focus:border-brick;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-ink;
+  }
+
+  /* Pills / tags */
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  /* Respect users who ask for less motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
   }
 }
