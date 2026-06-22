@@ -6,7 +6,23 @@ import {
   type Article,
 } from "@/lib/articles/types";
 
-// Warm, real food photos cycled across cards (like the old gradients did).
+// Real food photos matched to each article by subject. Falls back to a cycling
+// pool for any article not in the map (e.g. future DB content).
+const IMAGE_BY_SLUG: Record<string, string> = {
+  "oxtail-heart-smart": "/images/food/oxtail.jpg",
+  "fried-chicken-lighter": "/images/food/oxtail.jpg",
+  "cholesterol-plain-and-simple": "/images/food/salmon.jpg",
+  "blood-pressure-the-quiet-one": "/images/food/salmon.jpg",
+  "rice-and-peas-lighter": "/images/food/seafoodrice.jpg",
+  "salt-without-losing-flavor": "/images/food/seafoodrice.jpg",
+  "fiber-the-quiet-hero": "/images/food/beans.jpg",
+  "diabetes-and-your-heart": "/images/food/beans.jpg",
+  "sweet-drinks-and-your-heart": "/images/food/porridge.jpg",
+  "read-a-food-label": "/images/food/porridge.jpg",
+  "greens-that-love-you-back": "/images/food/greens.jpg",
+  "move-on-your-terms": "/images/food/greens.jpg",
+};
+
 const FOOD = [
   "/images/food/seafoodrice.jpg",
   "/images/food/greens.jpg",
@@ -31,7 +47,7 @@ export function ArticleCard({
     >
       <div className="relative h-32 overflow-hidden rounded-t-2xl bg-cream">
         <Image
-          src={FOOD[index % FOOD.length]}
+          src={IMAGE_BY_SLUG[article.slug] ?? FOOD[index % FOOD.length]}
           alt=""
           fill
           sizes="(max-width: 640px) 100vw, 360px"
