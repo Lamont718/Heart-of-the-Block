@@ -132,6 +132,7 @@ export function Scanner() {
             <video
               ref={videoRef}
               className="h-full w-full object-cover"
+              aria-label="Camera preview for barcode scanning"
               playsInline
               muted
             />

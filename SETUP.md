@@ -1,10 +1,29 @@
 # Heart of the Block — setup
 
-A Brooklyn heart-health platform. **Step 1 (scaffold, auth, shell, medical-safety
-disclaimer) is built.** Later steps — directory, swap finder, scanner, content,
-plans, community — are intentionally not built yet (see `SPEC.md §7`).
+A Brooklyn heart-health platform. **All 8 build steps (SPEC §7) are complete:**
+scaffold + auth + medical-safety shell, the Directory, Food Swap Finder, Numbers
+Tracker, Barcode Scanner, educational content, guided plans, community &
+accountability, and the polish pass (PWA, SEO, a11y, error pages).
 
-## Run it locally (no Supabase needed for the shell)
+Everything runs **right now without Supabase** — the interactive tools, content,
+plans, and accountability hub are local-first (browser storage), and the
+Directory/Swaps/Articles read real bundled data. Connecting Supabase turns on
+accounts and cross-device sync; see below.
+
+## What's built (where to look)
+
+| Feature | Route | Notes |
+|---|---|---|
+| Home + medical-safety shell | `/` | first-run modal, persistent disclaimer |
+| Directory (map + filters) | `/directory` | 41 verified Brooklyn spots, Leaflet/OSM |
+| Food Swap Finder | `/swaps` | ~55 swaps, shareable cards |
+| Barcode Scanner | `/scan` | Open Food Facts → our scoring → swap loop |
+| Numbers Tracker | `/tracker` | weight/BP/cholesterol, trends, weight goal |
+| Learn (articles) | `/learn` | 12 articles, topic filters, read-aloud |
+| Guided plans | `/plans` | 3 meal + 3 movement plans, progress tracking |
+| Community / accountability | `/community` | streaks, check-ins, challenges, points |
+
+## Run it locally (no Supabase needed)
 
 ```bash
 npm install

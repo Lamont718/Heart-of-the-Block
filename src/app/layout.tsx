@@ -41,7 +41,14 @@ export const metadata: Metadata = {
     description:
       "Brooklyn heart health, the way you live. Real tools, real food, real places near you.",
     type: "website",
+    siteName: "Heart of the Block",
   },
+  appleWebApp: {
+    capable: true,
+    title: "Heart of the Block",
+    statusBarStyle: "default",
+  },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
