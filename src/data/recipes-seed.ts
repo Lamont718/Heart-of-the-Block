@@ -1,0 +1,244 @@
+/**
+ * Heart-smart recipes — the food Brooklyn actually cooks, made a little kinder to
+ * your heart. These turn the Learn articles into things you can actually cook,
+ * and reuse the food photos already in /public/images/food. Culturally grounded,
+ * plain-language, never clinical. Each ends pointing back to a doctor (SPEC §6).
+ */
+
+export type Recipe = {
+  id: string;
+  slug: string;
+  title: string;
+  image: string;
+  blurb: string;
+  minutes: number;
+  servings: number;
+  tags: string[];
+  ingredients: string[];
+  steps: string[];
+  /** The heart-smart moves that make this version lighter. */
+  swaps: string[];
+  why: string;
+  relatedArticleSlug?: string;
+};
+
+export const RECIPES: Recipe[] = [
+  {
+    id: "rec-oxtail",
+    slug: "heart-smart-oxtail",
+    title: "Heart-smart oxtail",
+    image: "/images/food/oxtail.jpg",
+    blurb: "Rich, slow-cooked oxtail — with less of the fat that sits in the gravy.",
+    minutes: 180,
+    servings: 6,
+    tags: ["Caribbean", "Dinner", "Heart-smart"],
+    ingredients: [
+      "3 lb oxtail, big chunks of hard fat trimmed off",
+      "1 onion, chopped",
+      "4 cloves garlic, minced",
+      "3 stalks scallion, chopped",
+      "A few sprigs fresh thyme",
+      "1 tsp pimento (allspice) berries",
+      "2 carrots, chunked",
+      "1 can butter beans, drained and rinsed",
+      "1 tsp browning (optional, for color)",
+      "1 scotch bonnet, left whole (optional)",
+      "Low-sodium broth or water to cover",
+      "Brown rice, to serve",
+    ],
+    steps: [
+      "Season the trimmed oxtail with garlic, scallion, thyme, pimento, and just a little salt. Let it sit while you prep.",
+      "Brown the oxtail in a hot pot on all sides, then add onion and a touch of browning.",
+      "Pour in broth or water to cover. Cover and simmer low for about 2.5 hours, until the meat is falling off the bone.",
+      "Add carrots and butter beans in the last 30 minutes.",
+      "Let it rest a few minutes, then spoon the fat off the top of the gravy.",
+      "Serve over brown rice.",
+    ],
+    swaps: [
+      "Trim the hard fat before browning — the meat still falls off the bone.",
+      "Skim the fat that rises to the top of the gravy after it cooks.",
+      "Stretch it with carrots and butter beans so a smaller portion of meat fills the plate.",
+      "Go easy on the browning sugar and salt — let the pimento, thyme, and scotch bonnet carry it.",
+    ],
+    why: "Same rich, fall-off-the-bone oxtail — just less of the saturated fat that's hard on your heart.",
+    relatedArticleSlug: "oxtail-heart-smart",
+  },
+  {
+    id: "rec-oven-chicken",
+    slug: "oven-fried-chicken",
+    title: "Oven-‘fried’ chicken",
+    image: "/images/food/friedchicken.jpg",
+    blurb: "Crispy, golden, seasoned — without the deep fryer.",
+    minutes: 55,
+    servings: 4,
+    tags: ["Soul food", "Dinner", "Heart-smart"],
+    ingredients: [
+      "8 pieces chicken (skin off a few)",
+      "1 cup buttermilk (or plain yogurt thinned with water)",
+      "1 cup whole-wheat flour or seasoned breadcrumbs",
+      "1 tbsp paprika",
+      "2 tsp garlic powder",
+      "1 tsp black pepper",
+      "½ tsp cayenne (to taste)",
+      "A little salt",
+      "Cooking oil spray",
+    ],
+    steps: [
+      "Soak the chicken in buttermilk for 30 minutes (or overnight).",
+      "Mix the flour with paprika, garlic powder, pepper, cayenne, and a little salt.",
+      "Dredge each piece, pressing the coating on, and set on a rack over a baking sheet.",
+      "Spray the tops with oil so they crisp.",
+      "Bake at 425°F for about 40 minutes, flipping halfway, until golden and cooked through (165°F inside).",
+    ],
+    swaps: [
+      "Oven-fry (or air-fry) instead of deep-frying — same crunch, far less fat.",
+      "Take the skin off some pieces; that's where a lot of the saturated fat lives.",
+      "Season hard — garlic, paprika, pepper, cayenne — so you don't miss anything.",
+    ],
+    why: "The same Sunday chicken with a fraction of the fryer fat.",
+    relatedArticleSlug: "fried-chicken-lighter",
+  },
+  {
+    id: "rec-rice-and-peas",
+    slug: "rice-and-peas-lighter",
+    title: "Rice and peas, lighter",
+    image: "/images/food/seafoodrice.jpg",
+    blurb: "The Sunday staple — with more fiber and a little less coconut fat.",
+    minutes: 45,
+    servings: 6,
+    tags: ["Caribbean", "Side", "Fiber"],
+    ingredients: [
+      "2 cups brown rice (or half brown, half white)",
+      "1 can kidney or pigeon peas, drained and rinsed",
+      "1 cup light coconut milk",
+      "3 cloves garlic, minced",
+      "2 stalks scallion",
+      "A few sprigs thyme",
+      "½ tsp pimento (allspice)",
+      "1 scotch bonnet, left whole",
+      "Water as needed",
+    ],
+    steps: [
+      "In a pot, sauté garlic, scallion, thyme, and pimento for a minute.",
+      "Add the peas, light coconut milk, and enough water to cook the rice (check your rice's ratio).",
+      "Lay the whole scotch bonnet on top (don't burst it) for flavor without too much heat.",
+      "Stir in the rice, bring to a boil, then cover and simmer low until the liquid is absorbed.",
+      "Fluff and remove the scotch bonnet before serving.",
+    ],
+    swaps: [
+      "Use brown rice — or start half brown, half white — for more heart-healthy fiber.",
+      "Use light coconut milk, or less of the full-fat kind.",
+      "Let the coconut, garlic, and scallion do the talking instead of salt.",
+    ],
+    why: "Same Sunday plate, with more fiber and less of the coconut fat.",
+    relatedArticleSlug: "rice-and-peas-lighter",
+  },
+  {
+    id: "rec-stir-fry",
+    slug: "garden-veggie-stir-fry",
+    title: "Garden veggie stir-fry",
+    image: "/images/food/greens.jpg",
+    blurb: "A fast, colorful plate full of fiber — over brown rice.",
+    minutes: 25,
+    servings: 4,
+    tags: ["Quick", "Fiber", "Vegetable"],
+    ingredients: [
+      "1 head broccoli, in florets",
+      "2 carrots, sliced thin",
+      "1 bell pepper, sliced",
+      "1 cup green beans",
+      "3 cloves garlic, minced",
+      "1 tbsp fresh ginger, minced",
+      "2 tbsp low-sodium soy sauce or tamari",
+      "1 tsp sesame oil",
+      "A handful of cashews",
+      "Brown rice, to serve",
+    ],
+    steps: [
+      "Get a pan or wok very hot. Add a little oil, then the garlic and ginger for 30 seconds.",
+      "Add the firmer vegetables first (carrots, broccoli, green beans) and stir-fry a few minutes.",
+      "Add the pepper and toss until everything is bright and just tender.",
+      "Splash in the low-sodium soy and sesame oil, toss, then fold in the cashews.",
+      "Serve over brown rice.",
+    ],
+    swaps: [
+      "Low-sodium soy sauce instead of regular — big sodium savings.",
+      "Pile on the vegetables; let them be the meal.",
+      "Cashews add good fats and crunch — keep the handful to a handful.",
+    ],
+    why: "A whole plate of fiber and color in under half an hour.",
+    relatedArticleSlug: "greens-that-love-you-back",
+  },
+  {
+    id: "rec-salmon",
+    slug: "brothy-ginger-salmon-bowl",
+    title: "Brothy ginger salmon bowl",
+    image: "/images/food/salmon.jpg",
+    blurb: "Omega-3s for your heart in a light, warming bowl.",
+    minutes: 30,
+    servings: 2,
+    tags: ["Fish", "Good fats", "Light"],
+    ingredients: [
+      "2 salmon fillets",
+      "4 cups low-sodium broth",
+      "1 tbsp fresh ginger, sliced",
+      "2 cloves garlic, smashed",
+      "1 stalk scallion",
+      "2 cups bok choy or spinach",
+      "A small portion of rice noodles or brown rice",
+      "Lime, cilantro, and chili to top (optional)",
+    ],
+    steps: [
+      "Simmer the broth with ginger, garlic, and scallion for 10 minutes to build flavor.",
+      "Slip the salmon into the broth and poach gently until just cooked through, about 6–8 minutes.",
+      "Add the greens at the end to wilt.",
+      "Cook the noodles or rice separately and add a small portion to each bowl.",
+      "Ladle the broth and salmon over, and top with lime, cilantro, and chili.",
+    ],
+    swaps: [
+      "Poach the salmon instead of frying it.",
+      "Use low-sodium broth so you control the salt.",
+      "Load the bowl with greens and keep the noodle/rice portion small.",
+    ],
+    why: "Salmon's omega-3s are good for your heart — and a brothy bowl keeps it light.",
+    relatedArticleSlug: "cholesterol-plain-and-simple",
+  },
+  {
+    id: "rec-porridge",
+    slug: "cornmeal-porridge",
+    title: "Spiced cornmeal porridge",
+    image: "/images/food/porridge.jpg",
+    blurb: "A warm, filling breakfast — spiced, not over-sweet.",
+    minutes: 20,
+    servings: 2,
+    tags: ["Caribbean", "Breakfast", "Fiber"],
+    ingredients: [
+      "½ cup fine cornmeal",
+      "2 cups water",
+      "1 cup low-fat or plant milk (oat works well)",
+      "½ tsp cinnamon",
+      "¼ tsp nutmeg",
+      "1 tsp vanilla",
+      "A little sweetener to taste (go easy)",
+      "Pinch of salt",
+    ],
+    steps: [
+      "Whisk the cornmeal into 1 cup of the water until smooth (no lumps).",
+      "Bring the rest of the water to a boil, then slowly whisk in the cornmeal mixture.",
+      "Cook on low, stirring often, until it thickens — about 8–10 minutes.",
+      "Stir in the milk, cinnamon, nutmeg, vanilla, and a little sweetener.",
+      "Cook another couple of minutes and serve warm.",
+    ],
+    swaps: [
+      "Go easy on the condensed/sweetened milk — spice does the heavy lifting.",
+      "Use low-fat or plant milk.",
+      "Lean on cinnamon, nutmeg, and vanilla for flavor instead of more sugar.",
+    ],
+    why: "A warm, filling start to the day that won't spike your sugar like a sweet pastry.",
+    relatedArticleSlug: "diabetes-and-your-heart",
+  },
+];
+
+export function getRecipe(slug: string): Recipe | undefined {
+  return RECIPES.find((r) => r.slug === slug);
+}

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getArticles } from "@/lib/articles/articles";
 import { getPlans } from "@/lib/plans/plans";
+import { RECIPES } from "@/data/recipes-seed";
 
 const BASE = "https://heartoftheblock.org";
 
@@ -17,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/scan",
     "/tracker",
     "/learn",
+    "/recipes",
     "/plans",
     "/community",
     "/disclaimer",
@@ -45,5 +47,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...articleRoutes, ...planRoutes];
+  const recipeRoutes = RECIPES.map((r) => ({
+    url: `${BASE}/recipes/${r.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...articleRoutes, ...planRoutes, ...recipeRoutes];
 }

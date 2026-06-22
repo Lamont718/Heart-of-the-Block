@@ -7,6 +7,7 @@ import { TOPIC_META, readingMinutes } from "@/lib/articles/types";
 import { ReadAloud } from "@/components/articles/read-aloud";
 import { ArticleCard } from "@/components/articles/article-card";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+import { RECIPES } from "@/data/recipes-seed";
 
 export const revalidate = 3600;
 
@@ -36,6 +37,8 @@ export default async function ArticlePage({
   const html = renderMarkdown(article.body);
   const plain = toPlainText(article.body);
   const mins = readingMinutes(article.body);
+
+  const recipe = RECIPES.find((r) => r.relatedArticleSlug === article.slug);
 
   const all = await getArticles();
   const related = all
@@ -80,6 +83,25 @@ export default async function ArticlePage({
         className="article-prose mt-6"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      {recipe && (
+        <Link
+          href={`/recipes/${recipe.slug}`}
+          className="mt-8 flex items-center gap-4 rounded-2xl border border-teal/30 bg-teal-100 p-4 transition hover:-translate-y-0.5 hover:shadow-lift"
+        >
+          <span aria-hidden className="text-3xl">
+            🍳
+          </span>
+          <span>
+            <span className="block text-xs font-bold uppercase tracking-wide text-teal">
+              Try the recipe
+            </span>
+            <span className="block font-display text-lg font-bold text-ink">
+              {recipe.title} →
+            </span>
+          </span>
+        </Link>
+      )}
 
       <div className="mt-10">
         <DisclaimerBanner variant="inline" />

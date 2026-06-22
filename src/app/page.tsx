@@ -328,7 +328,10 @@ export default async function Home() {
               <ArticleCard key={article.id} article={article} index={i} />
             ))}
           </div>
-          <div className="mt-8 text-center">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/recipes" className="btn-primary">
+              Browse heart-smart recipes
+            </Link>
             <Link href="/learn" className="btn-secondary">
               Read more
             </Link>
