@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { getArticles } from "@/lib/articles/articles";
+import { ArticleCard } from "@/components/articles/article-card";
 
-export default function Home() {
+export default async function Home() {
+  const featured = (await getArticles()).slice(0, 3);
   return (
     <>
       {/* ---------- Hero ---------- */}
@@ -153,15 +156,14 @@ export default function Home() {
             sub="Short, plain-language reads grounded in what Brooklyn actually cooks — oxtail, fried chicken, rice and peas — done heart-smart. With audio read-aloud."
           />
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
-            {["Cholesterol, plainly", "Salt without the struggle", "Move on your terms"].map(
-              (t) => (
-                <div key={t} className="card">
-                  <div className="mb-3 h-28 rounded-xl bg-gradient-to-br from-brick-100 to-gold-100" />
-                  <h3 className="font-display text-lg font-bold text-ink">{t}</h3>
-                  <p className="mt-1 text-sm text-muted">Coming soon.</p>
-                </div>
-              ),
-            )}
+            {featured.map((article, i) => (
+              <ArticleCard key={article.id} article={article} index={i} />
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link href="/learn" className="btn-secondary">
+              Read more
+            </Link>
           </div>
         </div>
       </section>

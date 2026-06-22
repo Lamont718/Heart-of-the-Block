@@ -8,7 +8,7 @@ import { MobileNav } from "./mobile-nav";
 export const NAV_LINKS = [
   { href: "/#tools", label: "Tools" },
   { href: "/directory", label: "Where to shop" },
-  { href: "/#learn", label: "Learn" },
+  { href: "/learn", label: "Learn" },
   { href: "/#community", label: "Community" },
 ];
 

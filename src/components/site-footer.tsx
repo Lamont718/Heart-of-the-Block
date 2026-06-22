@@ -31,7 +31,7 @@ export function SiteFooter() {
             title="Explore"
             links={[
               { href: "/directory", label: "Where to shop" },
-              { href: "/#learn", label: "Learn" },
+              { href: "/learn", label: "Learn" },
               { href: "/#community", label: "Community" },
             ]}
           />

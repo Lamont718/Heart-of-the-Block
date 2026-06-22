@@ -100,6 +100,41 @@ body {
   .pill {
     @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold;
   }
+
+  /* Article body (rendered markdown) */
+  .article-prose {
+    @apply text-[1.05rem] leading-relaxed text-ink;
+  }
+  .article-prose p {
+    @apply my-4;
+  }
+  .article-prose h2 {
+    @apply mt-8 font-display text-2xl font-extrabold text-ink;
+  }
+  .article-prose h3 {
+    @apply mt-6 font-display text-xl font-bold text-ink;
+  }
+  .article-prose ul {
+    @apply my-4 list-disc space-y-2 pl-6;
+  }
+  .article-prose ol {
+    @apply my-4 list-decimal space-y-2 pl-6;
+  }
+  .article-prose li {
+    @apply pl-1;
+  }
+  .article-prose a {
+    @apply font-semibold text-brick-700 underline;
+  }
+  .article-prose strong {
+    @apply font-semibold text-ink;
+  }
+  .article-prose em {
+    @apply text-muted;
+  }
+  .article-prose blockquote {
+    @apply my-4 border-l-4 border-line pl-4 text-muted;
+  }
 }
 
 @layer utilities {
