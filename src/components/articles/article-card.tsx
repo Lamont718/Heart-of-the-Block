@@ -21,6 +21,7 @@ const IMAGE_BY_SLUG: Record<string, string> = {
   "read-a-food-label": "/images/food/porridge.jpg",
   "greens-that-love-you-back": "/images/food/greens.jpg",
   "move-on-your-terms": "/images/food/greens.jpg",
+  "be-your-own-advocate": "/images/hero-block.jpg",
 };
 
 const FOOD = [

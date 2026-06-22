@@ -1,6 +1,6 @@
 /** Numbers Tracker types. Local-first now; maps to `health_logs` when synced. */
 
-export type Metric = "weight" | "bp" | "cholesterol";
+export type Metric = "a1c" | "bp" | "cholesterol" | "weight";
 
 export interface Reading {
   id: string;
@@ -24,11 +24,14 @@ export interface WeightGoal {
   startDate: string;
 }
 
+// Ordered to lead with the "ABCs of Life" — A1C, Blood pressure, Cholesterol —
+// then weight. Tab order follows this object's key order.
 export const METRIC_META: Record<
   Metric,
   { label: string; short: string; emoji: string }
 > = {
-  weight: { label: "Weight", short: "Weight", emoji: "⚖️" },
+  a1c: { label: "Blood sugar (A1C)", short: "A1C", emoji: "🍬" },
   bp: { label: "Blood pressure", short: "BP", emoji: "🫀" },
   cholesterol: { label: "Cholesterol", short: "Cholesterol", emoji: "🩸" },
+  weight: { label: "Weight", short: "Weight", emoji: "⚖️" },
 };

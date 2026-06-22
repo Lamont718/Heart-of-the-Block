@@ -275,4 +275,30 @@ If you have diabetes or it runs in your family, regular check-ups matter — a l
 *This is general education, not a treatment plan. Diabetes care should be guided by your doctor.*
 `,
   ),
+  a(
+    "art-advocate",
+    "Be your own best advocate",
+    "be-your-own-advocate",
+    "No one knows your body better than you. If something doesn't feel right, say so — and keep saying it.",
+    ["advocacy", "heart-basics"],
+    `
+The single most important thing you can bring to the doctor's office isn't your insurance card. It's your voice.
+
+In our community, too many people get rushed through, talked over, or quietly dismissed — sometimes because of who they are, not what they came in for. The fix isn't to stop going. It's to go in ready, and to speak up.
+
+**Know your numbers before you walk in.** The ABCs — your **A1C**, **blood pressure**, and **cholesterol** — are yours. When you know them, you can ask real questions instead of just nodding along. (You can log all three right here and bring the trends with you.)
+
+**Ask until you understand.** "What does that number mean for me?" "What are my options?" "What happens if we wait?" A good provider will slow down and answer. You're not being difficult — you're being involved.
+
+**If it doesn't feel right, it isn't.** You live in your body every day; you know when something's off. If you're in pain and you feel brushed aside, say it plainly: "I need this looked at." Don't let anyone hand you a diagnosis of "you're fine" that your own body is arguing with.
+
+**You're allowed to change providers.** If your doctor leaves you more scared than informed — or never really looks at *you* — find another one. A second opinion isn't an insult. It's your right, and sometimes it's what catches the thing the first person missed.
+
+**Prevention beats extraction.** It's easier to stay ahead of high blood pressure, high sugar, and high cholesterol than to fix the damage later. Screenings, check-ups, and small habits now are you advocating for the older you.
+
+You deserve a provider who gives you their time and takes you seriously. Keep asking until you find one.
+
+*This is encouragement and education, not medical advice. If something feels seriously wrong, don't wait — in an emergency call 911.*
+`,
+  ),
 ];

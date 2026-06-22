@@ -124,6 +124,53 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ---------- The ABCs of Life ---------- */}
+      <section className="scroll-mt-20 py-16">
+        <div className="container-block">
+          <div className="card grid gap-6 overflow-hidden bg-ink text-white lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wide text-gold">
+                Know your numbers
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">
+                The ABCs of Life
+              </h2>
+              <p className="mt-3 max-w-md text-white/85">
+                Three numbers worth getting ahead of — born from a Father&apos;s
+                Day talk with two Brooklyn health pros right here on the block.
+                Learn what they mean, then track yours.
+              </p>
+              <Link
+                href="/abcs"
+                className="btn mt-6 bg-white text-ink hover:bg-cream"
+              >
+                Learn the ABCs
+              </Link>
+            </div>
+            <ul className="grid gap-3">
+              {[
+                { l: "A", n: "A1C", d: "your blood sugar over ~3 months" },
+                { l: "B", n: "Blood pressure", d: "the quiet one — usually no symptoms" },
+                { l: "C", n: "Cholesterol", d: "the good (HDL) and the bad (LDL)" },
+              ].map((x) => (
+                <li
+                  key={x.l}
+                  className="flex items-center gap-4 rounded-xl bg-white/10 p-3"
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brick font-display text-lg font-extrabold text-white">
+                    {x.l}
+                  </span>
+                  <div>
+                    <p className="font-semibold">{x.n}</p>
+                    <p className="text-sm text-white/75">{x.d}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- Directory ---------- */}
       <section id="directory" className="scroll-mt-20 py-16">
         <div className="container-block grid gap-8 lg:grid-cols-2 lg:items-center">

@@ -16,8 +16,10 @@ create extension if not exists "pgcrypto";
 -- Enums
 -- ---------------------------------------------------------------------------
 do $$ begin
-  create type health_log_type as enum ('cholesterol', 'bp', 'weight');
+  create type health_log_type as enum ('a1c', 'cholesterol', 'bp', 'weight');
 exception when duplicate_object then null; end $$;
+-- For databases created before 'a1c' existed (the "A" of the ABCs of Life):
+alter type health_log_type add value if not exists 'a1c';
 
 do $$ begin
   create type activity_type as enum ('walk', 'home_workout', 'other');

@@ -27,7 +27,7 @@ const fmtDate = (iso: string) => {
 };
 
 export function TrackerApp({ signedIn }: { signedIn: boolean }) {
-  const [metric, setMetric] = useState<Metric>("weight");
+  const [metric, setMetric] = useState<Metric>("a1c");
   const [mounted, setMounted] = useState(false);
   const [readings, setReadings] = useState<Reading[]>([]);
   const [goal, setGoal] = useState<WeightGoal | null>(null);
@@ -47,7 +47,7 @@ export function TrackerApp({ signedIn }: { signedIn: boolean }) {
     <div>
       {/* Tabs */}
       <div
-        className="grid grid-cols-3 gap-1 rounded-xl bg-cream p-1"
+        className="grid grid-cols-2 gap-1 rounded-xl bg-cream p-1 sm:grid-cols-4"
         role="tablist"
         aria-label="Choose what to track"
       >
@@ -145,7 +145,13 @@ function LogForm({
     setErr("");
     const num = (v: string) => (v.trim() === "" ? NaN : Number(v));
 
-    if (metric === "weight") {
+    if (metric === "a1c") {
+      const value = num(a);
+      if (!(value > 0)) return setErr("Enter your A1C number.");
+      if (value > 25)
+        return setErr("That looks high for an A1C — it's usually a number like 5.6.");
+      addReading({ metric, date, values: { value } });
+    } else if (metric === "weight") {
       const value = num(a);
       if (!(value > 0)) return setErr("Enter a weight.");
       addReading({ metric, date, values: { value }, unit });
@@ -176,6 +182,26 @@ function LogForm({
       <h2 className="font-display text-lg font-bold text-ink">
         Log {METRIC_META[metric].label.toLowerCase()}
       </h2>
+
+      {metric === "a1c" && (
+        <div>
+          <label htmlFor="a1c" className="label">
+            A1C (%)
+          </label>
+          <input
+            id="a1c"
+            inputMode="decimal"
+            value={a}
+            onChange={(e) => setA(e.target.value)}
+            className="field"
+            placeholder="e.g. 5.6"
+          />
+          <p className="mt-1.5 text-xs text-muted">
+            Your A1C is the “A” in the ABCs of Life — your average blood sugar
+            over about 3 months. It’s the number from your blood test, like 5.6.
+          </p>
+        </div>
+      )}
 
       {metric === "weight" && (
         <div className="flex gap-3">
@@ -331,8 +357,16 @@ function TrendCard({
   }
 
   let series: Series[] = [];
-  const unit = "";
-  if (metric === "weight") {
+  const unit = metric === "a1c" ? "%" : "";
+  if (metric === "a1c") {
+    series = [
+      {
+        label: "A1C",
+        color: "rgb(var(--brick-rgb))",
+        points: readings.map((r) => ({ date: r.date, value: r.values.value })),
+      },
+    ];
+  } else if (metric === "weight") {
     series = [
       {
         label: "Weight",
@@ -405,6 +439,14 @@ function TrendCard({
 function summarize(metric: Metric, readings: Reading[]) {
   const first = readings[0];
   const last = readings[readings.length - 1];
+  if (metric === "a1c") {
+    const delta = last.values.value - first.values.value;
+    const change =
+      readings.length > 1
+        ? `${delta === 0 ? "No change" : `${delta > 0 ? "↑" : "↓"} ${Math.abs(delta).toFixed(1)}%`} since ${fmtDate(first.date)}`
+        : "";
+    return { headline: `${last.values.value}%`, change };
+  }
   if (metric === "weight") {
     const u = last.unit ?? "lb";
     const delta = last.values.value - first.values.value;
@@ -561,6 +603,7 @@ function HistoryCard({
   const rows = [...readings].reverse();
 
   const valueText = (r: Reading) => {
+    if (metric === "a1c") return `${r.values.value}%`;
     if (metric === "weight") return `${r.values.value} ${r.unit ?? "lb"}`;
     if (metric === "bp") return `${r.values.systolic}/${r.values.diastolic}`;
     return `Total ${r.values.total}${r.values.ldl != null ? ` · LDL ${r.values.ldl}` : ""}${r.values.hdl != null ? ` · HDL ${r.values.hdl}` : ""}`;
@@ -597,9 +640,11 @@ function HistoryCard({
 
 function SafetyNote({ metric }: { metric: Metric }) {
   const text =
-    metric === "weight"
-      ? "Weight is just one part of your health. What a healthy weight looks like is different for everyone — your doctor can help you set a target that’s right for you."
-      : "We show your numbers and how they’re trending — we don’t tell you what they mean for your health. Bring these to your doctor; reading them together is how you get a real picture.";
+    metric === "a1c"
+      ? "Your A1C is your average blood sugar over about 3 months — the “A” in the ABCs of Life. We show the number and trend; what it means for you is a conversation for your doctor."
+      : metric === "weight"
+        ? "Weight is just one part of your health. What a healthy weight looks like is different for everyone — your doctor can help you set a target that’s right for you."
+        : "We show your numbers and how they’re trending — we don’t tell you what they mean for your health. Bring these to your doctor; reading them together is how you get a real picture.";
   return (
     <div className="mt-4 flex items-start gap-3 rounded-xl border border-gold/40 bg-gold-100 p-4 text-sm text-ink">
       <span aria-hidden className="text-lg">

@@ -25,7 +25,8 @@ export type TopicTag =
   | "cooking"
   | "movement"
   | "caribbean"
-  | "soul-food";
+  | "soul-food"
+  | "advocacy";
 
 export const TOPIC_META: Record<TopicTag, { label: string; emoji: string }> = {
   "heart-basics": { label: "Heart basics", emoji: "❤️" },
@@ -39,6 +40,7 @@ export const TOPIC_META: Record<TopicTag, { label: string; emoji: string }> = {
   movement: { label: "Moving more", emoji: "👟" },
   caribbean: { label: "Caribbean", emoji: "🌴" },
   "soul-food": { label: "Soul food", emoji: "🍗" },
+  advocacy: { label: "Speak up", emoji: "🗣️" },
 };
 
 /** Rough reading time from the markdown body (~200 wpm). */
