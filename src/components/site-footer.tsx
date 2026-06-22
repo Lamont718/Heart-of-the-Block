@@ -33,7 +33,7 @@ export function SiteFooter() {
               { href: "/directory", label: "Where to shop" },
               { href: "/plans", label: "Guided plans" },
               { href: "/learn", label: "Learn" },
-              { href: "/#community", label: "Community" },
+              { href: "/community", label: "Community" },
             ]}
           />
           <FooterCol

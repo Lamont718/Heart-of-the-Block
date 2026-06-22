@@ -182,10 +182,10 @@ export default async function Home() {
                   neighbors. The part that makes it stick.
                 </p>
                 <Link
-                  href="/login?mode=signup"
+                  href="/community"
                   className="btn mt-6 bg-white text-brick-700 hover:bg-cream"
                 >
-                  Join the block
+                  Start your streak
                 </Link>
               </div>
               <div className="flex flex-wrap gap-3 lg:justify-end">
