@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600;
 
 export default async function DirectoryPage() {
-  const { listings, usingPlaceholders } = await getListings();
+  const { listings, fromSeed } = await getListings();
+  const toConfirm = listings.filter((l) => !l.verified).length;
 
   return (
     <div className="container-block py-8 sm:py-10">
@@ -30,19 +31,26 @@ export default async function DirectoryPage() {
         </p>
       </header>
 
-      {usingPlaceholders && (
+      {fromSeed && (
         <div
           role="note"
-          className="mt-6 flex items-start gap-3 rounded-2xl border border-gold/40 bg-gold-100 p-4 text-sm text-ink"
+          className="mt-6 flex items-start gap-3 rounded-2xl border border-teal/30 bg-teal-100 p-4 text-sm text-ink"
         >
           <span aria-hidden className="text-lg">
-            🚧
+            ✅
           </span>
           <p>
-            <strong className="font-semibold">Sample data shown.</strong> These
-            are placeholders pinned to neighborhood centers so you can see how
-            the directory works — not real listings. The verified Brooklyn list
-            goes here next. (See <code>SETUP.md</code> → directory seeding.)
+            <strong className="font-semibold">
+              {listings.length} verified Brooklyn spots.
+            </strong>{" "}
+            Real markets, grocers, and farmers markets with fresh produce,
+            curated for the community.{" "}
+            {toConfirm > 0 && (
+              <>
+                A few ({toConfirm}) are marked <em>“to confirm”</em> while their
+                hours/season are finalized.
+              </>
+            )}
           </p>
         </div>
       )}

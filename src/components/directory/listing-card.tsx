@@ -18,6 +18,11 @@ const TAG_LABELS: Record<string, string> = {
   affordable: "Affordable",
   seasonal: "Seasonal",
   "local-farms": "Local farms",
+  "black-owned": "Black-owned",
+  "soul-food": "Soul food",
+  asian: "Asian",
+  jamaican: "Jamaican",
+  "produce-specialist": "Produce specialist",
 };
 
 export function ListingCard({
@@ -59,8 +64,11 @@ export function ListingCard({
               {cat.emoji} {cat.label}
             </span>
             {!listing.verified && (
-              <span className="pill bg-gold-100 text-ink" title="Awaiting verification">
-                Sample
+              <span
+                className="pill bg-gold-100 text-ink"
+                title="Hours/details still being confirmed"
+              >
+                To confirm
               </span>
             )}
           </div>

@@ -5,14 +5,18 @@ import type { DirectoryListing } from "./types";
 
 export type ListingsResult = {
   listings: DirectoryListing[];
-  /** True when we're showing placeholder seed data, not real DB rows. */
+  /** True only if no real listings are available (should not happen now that
+   *  the seed holds the verified Brooklyn set). */
   usingPlaceholders: boolean;
+  /** True when listings come from the bundled seed rather than the live DB. */
+  fromSeed: boolean;
 };
 
 /**
  * Directory listings for the page. Reads from `directory_listings` when Supabase
- * is configured and the table has rows; otherwise falls back to the labelled
- * placeholder seed so the UI is fully reviewable.
+ * is configured and the table has rows; otherwise falls back to the bundled
+ * seed — which now holds the REAL, address-verified Brooklyn list (June 2026),
+ * so the directory is fully usable even before Supabase is wired up.
  */
 export async function getListings(): Promise<ListingsResult> {
   if (isSupabaseConfigured) {
@@ -28,11 +32,12 @@ export async function getListings(): Promise<ListingsResult> {
         return {
           listings: data as unknown as DirectoryListing[],
           usingPlaceholders: false,
+          fromSeed: false,
         };
       }
     } catch {
       // fall through to seed
     }
   }
-  return { listings: DIRECTORY_SEED, usingPlaceholders: true };
+  return { listings: DIRECTORY_SEED, usingPlaceholders: false, fromSeed: true };
 }
