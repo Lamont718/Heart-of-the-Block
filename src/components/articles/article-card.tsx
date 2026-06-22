@@ -9,19 +9,19 @@ import {
 // Real food photos matched to each article by subject. Falls back to a cycling
 // pool for any article not in the map (e.g. future DB content).
 const IMAGE_BY_SLUG: Record<string, string> = {
-  "oxtail-heart-smart": "/images/food/oxtail.jpg",
-  "fried-chicken-lighter": "/images/food/oxtail.jpg",
-  "cholesterol-plain-and-simple": "/images/food/salmon.jpg",
-  "blood-pressure-the-quiet-one": "/images/food/salmon.jpg",
-  "rice-and-peas-lighter": "/images/food/seafoodrice.jpg",
-  "salt-without-losing-flavor": "/images/food/seafoodrice.jpg",
-  "fiber-the-quiet-hero": "/images/food/beans.jpg",
-  "diabetes-and-your-heart": "/images/food/beans.jpg",
-  "sweet-drinks-and-your-heart": "/images/food/porridge.jpg",
-  "read-a-food-label": "/images/food/porridge.jpg",
-  "greens-that-love-you-back": "/images/food/greens.jpg",
-  "move-on-your-terms": "/images/food/greens.jpg",
-  "be-your-own-advocate": "/images/hero-block.jpg",
+  "oxtail-heart-smart": "/images/food/oxtail.jpg", // Caribbean oxtail stew
+  "fried-chicken-lighter": "/images/food/friedchicken.jpg", // fried chicken
+  "cholesterol-plain-and-simple": "/images/food/salmon.jpg", // omega-3 / good fats
+  "blood-pressure-the-quiet-one": "/images/food/move.jpg", // movement = #1 BP tip
+  "rice-and-peas-lighter": "/images/food/seafoodrice.jpg", // rice & peas
+  "salt-without-losing-flavor": "/images/cooking.jpg", // seasoning / cooking
+  "fiber-the-quiet-hero": "/images/food/beans.jpg", // beans = fiber
+  "diabetes-and-your-heart": "/images/food/porridge.jpg", // oats steady blood sugar
+  "sweet-drinks-and-your-heart": "/images/food/soda.jpg", // sugary drink
+  "read-a-food-label": "/images/market.jpg", // groceries / labels
+  "greens-that-love-you-back": "/images/food/greens.jpg", // greens
+  "move-on-your-terms": "/images/food/move.jpg", // exercise / movement
+  "be-your-own-advocate": "/images/hero-block.jpg", // a confident neighbor
 };
 
 const FOOD = [
