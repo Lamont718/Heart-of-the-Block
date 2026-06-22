@@ -9,6 +9,7 @@ export const NAV_LINKS = [
   { href: "/abcs", label: "The ABCs" },
   { href: "/directory", label: "Where to shop" },
   { href: "/healthy-buys", label: "Healthy buys" },
+  { href: "/money-for-produce", label: "Eat for less" },
   { href: "/plans", label: "Plans" },
   { href: "/learn", label: "Learn" },
   { href: "/community", label: "Community" },

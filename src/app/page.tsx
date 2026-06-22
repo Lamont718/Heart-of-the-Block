@@ -260,6 +260,50 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ---------- Money for produce ---------- */}
+      <section className="scroll-mt-20 py-16">
+        <div className="container-block">
+          <div className="card overflow-hidden bg-teal text-white">
+            <div className="grid gap-6 p-2 sm:p-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-wide text-teal-100">
+                  Eat well for less
+                </p>
+                <h2 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">
+                  There’s money for produce — most people just don’t know it
+                </h2>
+                <p className="mt-3 max-w-lg text-white/90">
+                  Health Bucks, free produce boxes, SNAP, WIC — real NYC programs
+                  that put cash toward fruits and vegetables. We show you who
+                  qualifies and how to get it.
+                </p>
+                <Link
+                  href="/money-for-produce"
+                  className="btn mt-6 bg-white text-teal hover:bg-cream"
+                >
+                  See what you qualify for
+                </Link>
+              </div>
+              <ul className="flex flex-wrap gap-2 lg:justify-end">
+                {[
+                  "🎟️ $2 back per $5 at markets",
+                  "📦 Free produce boxes",
+                  "🛒 SNAP",
+                  "🍎 WIC",
+                ].map((chip) => (
+                  <li
+                    key={chip}
+                    className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold"
+                  >
+                    {chip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- Learn ---------- */}
       <section id="learn" className="scroll-mt-20 py-16">
         <div className="container-block">
