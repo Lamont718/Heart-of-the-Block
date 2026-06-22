@@ -85,6 +85,7 @@ export default function Home() {
               emoji="📷"
               title="Barcode Scanner"
               body="Scan a product in the aisle and get a plain-language heart read on the spot — then a better swap."
+              href="/scan"
             />
             <FeatureCard
               emoji="📈"

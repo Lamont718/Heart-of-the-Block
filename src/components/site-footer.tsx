@@ -22,8 +22,8 @@ export function SiteFooter() {
             title="The tools"
             links={[
               { href: "/swaps", label: "Food Swap Finder" },
+              { href: "/scan", label: "Barcode Scanner" },
               { href: "/tracker", label: "Numbers Tracker" },
-              { href: "/#tools", label: "Barcode Scanner" },
               { href: "/#tools", label: "Heart-risk check" },
             ]}
           />

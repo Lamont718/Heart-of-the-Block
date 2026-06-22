@@ -33,3 +33,31 @@ export function matchSwaps(swaps: Swap[], rawQuery: string): Swap[] {
   );
   return scored.map((x) => x.swap);
 }
+
+/**
+ * Product → swap (the scanner's magic loop). Unlike matchSwaps (which treats
+ * the query as one term), this scans a longer product text (name + brand +
+ * categories) for any swap's keyword and returns the best (longest, most
+ * specific) match — so a Coca-Cola whose category is "Sodas" finds the soda swap.
+ */
+export function suggestSwapForProduct(
+  swaps: Swap[],
+  productText: string,
+): Swap | null {
+  const hay = ` ${productText.toLowerCase()} `;
+  let best: { swap: Swap; len: number } | null = null;
+
+  for (const swap of swaps) {
+    const terms = [
+      swap.original_food.toLowerCase(),
+      ...(swap.keywords ?? []).map((k) => k.toLowerCase()),
+    ].filter((t) => t.length >= 4);
+
+    for (const t of terms) {
+      if (hay.includes(t) && (!best || t.length > best.len)) {
+        best = { swap, len: t.length };
+      }
+    }
+  }
+  return best?.swap ?? null;
+}
