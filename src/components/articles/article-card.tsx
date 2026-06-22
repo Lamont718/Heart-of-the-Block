@@ -1,15 +1,19 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   TOPIC_META,
   readingMinutes,
   type Article,
 } from "@/lib/articles/types";
 
-const GRADIENTS = [
-  "from-brick-100 to-gold-100",
-  "from-teal-100 to-gold-100",
-  "from-gold-100 to-brick-100",
-  "from-teal-100 to-brick-100",
+// Warm, real food photos cycled across cards (like the old gradients did).
+const FOOD = [
+  "/images/food/seafoodrice.jpg",
+  "/images/food/greens.jpg",
+  "/images/food/oxtail.jpg",
+  "/images/food/salmon.jpg",
+  "/images/food/porridge.jpg",
+  "/images/food/beans.jpg",
 ];
 
 export function ArticleCard({
@@ -25,9 +29,15 @@ export function ArticleCard({
       href={`/learn/${article.slug}`}
       className="card group block p-0 transition hover:-translate-y-0.5 hover:shadow-lift"
     >
-      <div
-        className={`h-28 rounded-t-2xl bg-gradient-to-br ${GRADIENTS[index % GRADIENTS.length]}`}
-      />
+      <div className="relative h-32 overflow-hidden rounded-t-2xl bg-cream">
+        <Image
+          src={FOOD[index % FOOD.length]}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, 360px"
+          className="object-cover transition duration-300 group-hover:scale-[1.04]"
+        />
+      </div>
       <div className="p-5">
         <div className="mb-2 flex flex-wrap gap-1.5">
           {article.topic_tags.slice(0, 2).map((t) => (

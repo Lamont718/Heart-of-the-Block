@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getArticles } from "@/lib/articles/articles";
 import { ArticleCard } from "@/components/articles/article-card";
 
@@ -7,14 +8,19 @@ export default async function Home() {
   return (
     <>
       {/* ---------- Hero ---------- */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gold/25 via-cream to-brick/15">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gold-100 blur-3xl"
+          className="pointer-events-none absolute -right-20 -top-24 h-80 w-80 rounded-full bg-gold/30 blur-3xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-brick-100 blur-3xl"
+          className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-brick/20 blur-3xl"
+        />
+        {/* soft fade into the white Tools section below */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-cream"
         />
         <div className="container-block relative grid gap-10 py-14 sm:py-20 lg:grid-cols-2 lg:items-center">
           <div>
@@ -44,30 +50,33 @@ export default async function Home() {
             </p>
           </div>
 
-          {/* Hero card stack */}
-          <div className="relative mx-auto w-full max-w-sm">
-            <div className="card -rotate-2">
+          {/* Hero image + floating product hint */}
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="relative aspect-[5/4] overflow-hidden rounded-2xl border border-line shadow-card">
+              <Image
+                src="/images/hero-block.jpg"
+                alt="A Brooklyn neighbor smiling on her block"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 480px"
+                className="object-cover"
+              />
+            </div>
+            <div className="card absolute -bottom-6 -left-4 w-52 rotate-[-3deg]">
               <p className="text-sm font-semibold text-muted">Food Swap</p>
-              <p className="mt-1 font-display text-xl font-bold text-ink">
+              <p className="mt-1 font-display text-lg font-bold text-ink">
                 Oxtail, made heart-smart
               </p>
-              <div className="mt-3 flex items-center gap-2 text-sm">
-                <span className="pill bg-teal-100 text-teal">
-                  ↓ saturated fat
-                </span>
-                <span className="pill bg-gold-100 text-ink">same flavor</span>
-              </div>
-            </div>
-            <div className="card absolute -bottom-8 -right-2 w-56 rotate-3">
-              <p className="text-sm font-semibold text-muted">Scanned</p>
-              <p className="mt-1 font-display text-lg font-bold text-ink">
-                Aisle read
-              </p>
-              <span className="pill mt-2 bg-good/15 text-good">Good choice</span>
+              <span className="pill mt-2 bg-teal-100 text-teal">
+                ↓ saturated fat
+              </span>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Cultural signature motif — kente/quilt strip (see docs/VISUAL-REFERENCES.md) */}
+      <div className="weave-band" aria-hidden />
 
       {/* ---------- Tools ---------- */}
       <section id="tools" className="scroll-mt-20 bg-surface py-16">
@@ -131,15 +140,23 @@ export default async function Home() {
           </div>
           <Link
             href="/directory"
-            className="card block transition hover:-translate-y-0.5 hover:shadow-lift"
+            className="group block overflow-hidden rounded-2xl border border-line shadow-card transition hover:-translate-y-0.5 hover:shadow-lift"
           >
-            <div className="grid h-56 place-items-center rounded-xl bg-gradient-to-br from-teal-100 to-gold-100 text-center">
-              <div>
-                <p className="font-display text-lg font-bold text-ink">
-                  🗺️ Map of healthy spots
+            <div className="relative h-64">
+              <Image
+                src="/images/market.jpg"
+                alt="A neighborhood market in Brooklyn"
+                fill
+                sizes="(max-width: 1024px) 100vw, 560px"
+                className="object-cover transition duration-300 group-hover:scale-[1.03]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/15 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <p className="font-display text-lg font-bold">
+                  Markets, grocers & farmers markets
                 </p>
-                <p className="mt-1 text-sm text-muted">
-                  Tap to explore markets, grocers & farmers markets near you.
+                <p className="mt-1 text-sm text-white/85">
+                  Tap to explore healthy spots near you →
                 </p>
               </div>
             </div>
@@ -147,15 +164,75 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ---------- Healthy buys ---------- */}
+      <section className="scroll-mt-20 bg-surface py-16">
+        <div className="container-block">
+          <div className="card grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wide text-brick-700">
+                Shop smart
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-extrabold text-ink sm:text-4xl">
+                Healthy staples &amp; what they cost
+              </h2>
+              <p className="mt-3 text-muted">
+                Eating heart-smart on a budget is real. See what to grab at BJ&apos;s,
+                Aldi, ShopRite, Key Food, C-Town and Trader Joe&apos;s — and roughly
+                what the good stuff costs — so you walk in with a plan.
+              </p>
+              <Link href="/healthy-buys" className="btn-primary mt-6 inline-flex">
+                See the staples &amp; prices
+              </Link>
+            </div>
+            <ul className="grid grid-cols-2 gap-3">
+              {[
+                { e: "🍚", n: "Brown rice", p: "~$2–9" },
+                { e: "🫘", n: "Beans", p: "~$1–2" },
+                { e: "🐟", n: "Canned fish", p: "~$1.50–3" },
+                { e: "🥦", n: "Frozen veg", p: "~$1.50" },
+                { e: "🥣", n: "Oats", p: "~$3–4" },
+                { e: "🍌", n: "Bananas", p: "~$0.50/lb" },
+              ].map((i) => (
+                <li
+                  key={i.n}
+                  className="flex items-center gap-3 rounded-xl border border-line bg-cream px-3 py-2.5"
+                >
+                  <span className="text-2xl" aria-hidden>
+                    {i.e}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-ink">
+                      {i.n}
+                    </p>
+                    <p className="text-xs text-muted">{i.p}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- Learn ---------- */}
-      <section id="learn" className="scroll-mt-20 bg-surface py-16">
+      <section id="learn" className="scroll-mt-20 py-16">
         <div className="container-block">
           <SectionHeading
             eyebrow="Learn"
             title="Your favorites, made to love you back"
             sub="Short, plain-language reads grounded in what Brooklyn actually cooks — oxtail, fried chicken, rice and peas — done heart-smart. With audio read-aloud."
           />
-          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          <div className="mt-8 overflow-hidden rounded-2xl border border-line shadow-card">
+            <div className="relative h-44 sm:h-56">
+              <Image
+                src="/images/cooking.jpg"
+                alt="Hands preparing a home-cooked meal"
+                fill
+                sizes="(max-width: 768px) 100vw, 1100px"
+                className="object-cover"
+              />
+            </div>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-3">
             {featured.map((article, i) => (
               <ArticleCard key={article.id} article={article} index={i} />
             ))}
