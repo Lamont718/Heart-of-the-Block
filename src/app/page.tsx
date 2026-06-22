@@ -79,6 +79,7 @@ export default function Home() {
               emoji="🔎"
               title="Food Swap Finder"
               body="Tell us what you eat — we give you realistic, culturally-rooted swaps with the why. Shareable result cards."
+              href="/swaps"
             />
             <FeatureCard
               emoji="📷"
@@ -89,6 +90,7 @@ export default function Home() {
               emoji="📈"
               title="Numbers Tracker"
               body="Log cholesterol, blood pressure, and weight over time. Simple trends, no clutter."
+              href="/tracker"
             />
             <FeatureCard
               emoji="❤️"
@@ -231,18 +233,37 @@ function FeatureCard({
   emoji,
   title,
   body,
+  href,
 }: {
   emoji: string;
   title: string;
   body: string;
+  href?: string;
 }) {
-  return (
-    <div className="card transition hover:-translate-y-0.5 hover:shadow-lift">
+  const inner = (
+    <>
       <div className="text-3xl" aria-hidden>
         {emoji}
       </div>
-      <h3 className="mt-3 font-display text-lg font-bold text-ink">{title}</h3>
+      <h3 className="mt-3 font-display text-lg font-bold text-ink">
+        {title}
+        {href && <span className="ml-1 text-brick" aria-hidden>→</span>}
+      </h3>
       <p className="mt-1 text-sm text-muted">{body}</p>
-    </div>
+      {!href && (
+        <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-muted">
+          Coming soon
+        </p>
+      )}
+    </>
+  );
+  const cls =
+    "card block transition hover:-translate-y-0.5 hover:shadow-lift";
+  return href ? (
+    <Link href={href} className={cls}>
+      {inner}
+    </Link>
+  ) : (
+    <div className={`${cls} opacity-90`}>{inner}</div>
   );
 }

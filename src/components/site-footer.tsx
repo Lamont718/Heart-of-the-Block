@@ -21,9 +21,9 @@ export function SiteFooter() {
           <FooterCol
             title="The tools"
             links={[
-              { href: "/#tools", label: "Food Swap Finder" },
+              { href: "/swaps", label: "Food Swap Finder" },
+              { href: "/tracker", label: "Numbers Tracker" },
               { href: "/#tools", label: "Barcode Scanner" },
-              { href: "/#tools", label: "Numbers Tracker" },
               { href: "/#tools", label: "Heart-risk check" },
             ]}
           />
