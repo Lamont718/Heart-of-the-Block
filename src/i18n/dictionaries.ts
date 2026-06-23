@@ -16,6 +16,7 @@ export type Dict = {
     plans: string;
     learn: string;
     community: string;
+    tools: string;
   };
   auth: { signIn: string; getStarted: string; myAccount: string; signOut: string };
   menu: { open: string; close: string };
@@ -48,6 +49,7 @@ const en: Dict = {
     plans: "Plans",
     learn: "Learn",
     community: "Community",
+    tools: "Tools",
   },
   auth: {
     signIn: "Sign in",
@@ -88,6 +90,7 @@ const es: Dict = {
     plans: "Planes",
     learn: "Aprende",
     community: "Comunidad",
+    tools: "Herramientas",
   },
   auth: {
     signIn: "Iniciar sesión",
@@ -128,6 +131,7 @@ const ht: Dict = {
     plans: "Plan yo",
     learn: "Aprann",
     community: "Kominote",
+    tools: "Zouti",
   },
   auth: {
     signIn: "Konekte",

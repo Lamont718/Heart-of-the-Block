@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 import { Wordmark } from "./logo";
 import { UserMenu } from "./user-menu";
 import { MobileNav } from "./mobile-nav";
+import { ToolsMenu } from "./tools-menu";
 import { LanguageSwitcher } from "./language-switcher";
 import { useT } from "@/i18n/provider";
 import type { Dict } from "@/i18n/dictionaries";
@@ -39,6 +40,7 @@ export function SiteHeader({ user }: { user: User | null }) {
               {t.nav[link.key]}
             </Link>
           ))}
+          <ToolsMenu />
         </nav>
 
         <div className="flex items-center gap-2">

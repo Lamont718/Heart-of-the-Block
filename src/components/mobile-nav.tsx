@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { NAV_LINKS } from "./site-header";
 import { LanguageSwitcher } from "./language-switcher";
+import { toolsLinks } from "./tools-menu";
 import { useT } from "@/i18n/provider";
 
 export function MobileNav({ user }: { user: User | null }) {
@@ -62,6 +63,25 @@ export function MobileNav({ user }: { user: User | null }) {
                   {t.nav[link.key]}
                 </Link>
               ))}
+
+              <hr className="my-2 border-line" />
+              <p className="px-4 pb-1 text-xs font-bold uppercase tracking-wide text-muted">
+                {t.nav.tools}
+              </p>
+              {toolsLinks(t).map((tool) => (
+                <Link
+                  key={tool.href}
+                  href={tool.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-brick-100"
+                >
+                  <span aria-hidden className="text-lg">
+                    {tool.emoji}
+                  </span>
+                  {tool.label}
+                </Link>
+              ))}
+
               <hr className="my-2 border-line" />
               <div className="px-1 pb-1">
                 <LanguageSwitcher className="w-full [&>select]:w-full" />
