@@ -1,39 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SWAP_CATEGORY_META, type Swap } from "@/lib/swaps/types";
 
-const SAVE_KEY = "hotb.savedSwaps.v1";
-
-function readSaved(): string[] {
-  try {
-    return JSON.parse(localStorage.getItem(SAVE_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-
-export function SwapCard({ swap }: { swap: Swap }) {
+export function SwapCard({
+  swap,
+  saved = false,
+  onToggleSave,
+}: {
+  swap: Swap;
+  /** Omit save props (e.g. the scanner's suggested swap) to hide the heart. */
+  saved?: boolean;
+  onToggleSave?: () => void;
+}) {
   const cat = SWAP_CATEGORY_META[swap.category];
-  const [saved, setSaved] = useState(false);
   const [shared, setShared] = useState<"" | "copied" | "shared">("");
-
-  useEffect(() => {
-    setSaved(readSaved().includes(swap.id));
-  }, [swap.id]);
-
-  function toggleSave() {
-    const list = readSaved();
-    const next = list.includes(swap.id)
-      ? list.filter((id) => id !== swap.id)
-      : [...list, swap.id];
-    try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
-    setSaved(next.includes(swap.id));
-  }
 
   async function share() {
     const text = `Heart-smart swap: instead of ${swap.original_food}, try ${swap.swap_food}. Why: ${swap.reason}`;
@@ -62,17 +43,19 @@ export function SwapCard({ swap }: { swap: Swap }) {
         <span className="pill bg-cream text-muted">
           {cat.emoji} {cat.label}
         </span>
-        <button
-          onClick={toggleSave}
-          aria-pressed={saved}
-          aria-label={saved ? "Saved" : "Save this swap"}
-          className={`text-xl leading-none transition ${
-            saved ? "text-brick" : "text-muted hover:text-brick"
-          }`}
-          title={saved ? "Saved on this device" : "Save"}
-        >
-          {saved ? "♥" : "♡"}
-        </button>
+        {onToggleSave && (
+          <button
+            onClick={onToggleSave}
+            aria-pressed={saved}
+            aria-label={saved ? "Saved" : "Save this swap"}
+            className={`text-xl leading-none transition ${
+              saved ? "text-brick" : "text-muted hover:text-brick"
+            }`}
+            title={saved ? "Saved" : "Save"}
+          >
+            {saved ? "♥" : "♡"}
+          </button>
+        )}
       </div>
 
       {/* instead of → try */}

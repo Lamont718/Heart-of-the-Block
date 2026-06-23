@@ -3,22 +3,30 @@
 import { useEffect, useRef, useState } from "react";
 import type { IScannerControls } from "@zxing/browser";
 import type { ScanResponse, ScoreLevel } from "@/lib/scanner/types";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+import {
+  loadSavedScans,
+  migrateLocalSavedScans,
+  removeSavedScan,
+  saveScan as persistScan,
+  type SavedScan,
+} from "@/lib/scanner/saved";
 import { ScanResult } from "./scan-result";
 
 type View = "home" | "scanning" | "loading" | "result" | "notfound";
 
 const RECENT_KEY = "hotb.scanner.recent.v1";
-const SAVED_KEY = "hotb.scanner.saved.v1";
 
 type Recent = { barcode: string; name: string; level: ScoreLevel | null };
 
-export function Scanner() {
+export function Scanner({ signedIn }: { signedIn: boolean }) {
+  const remote = signedIn && isSupabaseConfigured;
   const [view, setView] = useState<View>("home");
   const [data, setData] = useState<ScanResponse | null>(null);
   const [lastBarcode, setLastBarcode] = useState("");
   const [manual, setManual] = useState("");
   const [error, setError] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [savedScans, setSavedScans] = useState<SavedScan[]>([]);
   const [recent, setRecent] = useState<Recent[]>([]);
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -30,8 +38,17 @@ export function Scanner() {
     } catch {
       /* ignore */
     }
+    (async () => {
+      try {
+        // On first signed-in load, lift locally-saved scans into the account.
+        if (remote) await migrateLocalSavedScans();
+        setSavedScans(await loadSavedScans(remote));
+      } catch {
+        /* leave saved list empty if it can't load */
+      }
+    })();
     return () => controlsRef.current?.stop();
-  }, []);
+  }, [remote]);
 
   function stopCamera() {
     controlsRef.current?.stop();
@@ -67,7 +84,6 @@ export function Scanner() {
   async function lookup(code: string) {
     const clean = code.replace(/\D/g, "");
     setLastBarcode(clean);
-    setSaved(false);
     setView("loading");
     try {
       const res = await fetch(`/api/product/${clean}`);
@@ -102,17 +118,42 @@ export function Scanner() {
     });
   }
 
-  function saveScan() {
+  async function saveScan() {
     if (!data?.product) return;
+    const product = data.product;
+    setError("");
+    // Optimistic add to the saved list.
+    setSavedScans((prev) =>
+      prev.some((s) => s.barcode === product.barcode)
+        ? prev
+        : [
+            {
+              barcode: product.barcode,
+              name: product.name,
+              brand: product.brand,
+              level: product.score.level,
+            },
+            ...prev,
+          ],
+    );
     try {
-      const list: string[] = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
-      const next = list.includes(data.product.barcode)
-        ? list
-        : [...list, data.product.barcode];
-      localStorage.setItem(SAVED_KEY, JSON.stringify(next));
-      setSaved(true);
+      await persistScan(product, remote);
     } catch {
-      /* ignore */
+      setError(
+        "We couldn’t save that just now. Check your connection and try again.",
+      );
+      setSavedScans((prev) =>
+        prev.filter((s) => s.barcode !== product.barcode),
+      );
+    }
+  }
+
+  async function removeSaved(barcode: string) {
+    setSavedScans((prev) => prev.filter((s) => s.barcode !== barcode));
+    try {
+      await removeSavedScan(barcode, remote);
+    } catch {
+      /* it'll reappear on next load if the delete failed */
     }
   }
 
@@ -154,7 +195,7 @@ export function Scanner() {
       ) : view === "result" && data ? (
         <ScanResult
           data={data}
-          saved={saved}
+          saved={savedScans.some((s) => s.barcode === data.product?.barcode)}
           onSave={saveScan}
           onScanAnother={reset}
         />
@@ -168,11 +209,23 @@ export function Scanner() {
           onStart={startScan}
           onManual={() => manual.trim() && lookup(manual)}
           recent={recent}
+          saved={savedScans}
           onPick={(b) => lookup(b)}
+          onRemoveSaved={removeSaved}
         />
       )}
     </div>
   );
+}
+
+function levelLabel(level: ScoreLevel | null) {
+  return level === "good"
+    ? "● good"
+    : level === "okay"
+      ? "◐ okay"
+      : level === "limit"
+        ? "○ limit"
+        : "—";
 }
 
 function Home({
@@ -182,7 +235,9 @@ function Home({
   onStart,
   onManual,
   recent,
+  saved,
   onPick,
+  onRemoveSaved,
 }: {
   error: string;
   manual: string;
@@ -190,7 +245,9 @@ function Home({
   onStart: () => void;
   onManual: () => void;
   recent: Recent[];
+  saved: SavedScan[];
   onPick: (barcode: string) => void;
+  onRemoveSaved: (barcode: string) => void;
 }) {
   return (
     <div className="space-y-5">
@@ -235,6 +292,41 @@ function Home({
         </div>
       </div>
 
+      {saved.length > 0 && (
+        <div className="card">
+          <h3 className="mb-2 font-display text-base font-bold text-ink">
+            ♥ Saved products
+          </h3>
+          <ul className="divide-y divide-line">
+            {saved.map((s) => (
+              <li key={s.barcode} className="flex items-center gap-2 py-2.5">
+                <button
+                  onClick={() => onPick(s.barcode)}
+                  className="flex flex-1 items-center justify-between text-left hover:text-brick-700"
+                >
+                  <span className="truncate text-sm font-semibold text-ink">
+                    {s.name}
+                    {s.brand ? (
+                      <span className="font-normal text-muted"> · {s.brand}</span>
+                    ) : null}
+                  </span>
+                  <span className="ml-3 shrink-0 text-xs text-muted">
+                    {levelLabel(s.level)}
+                  </span>
+                </button>
+                <button
+                  onClick={() => onRemoveSaved(s.barcode)}
+                  aria-label={`Remove ${s.name} from saved`}
+                  className="shrink-0 rounded-lg px-2 py-1 text-sm font-semibold text-muted hover:bg-brick-100 hover:text-brick-700"
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {recent.length > 0 && (
         <div className="card">
           <h3 className="mb-2 font-display text-base font-bold text-ink">
@@ -251,13 +343,7 @@ function Home({
                     {r.name}
                   </span>
                   <span className="ml-3 shrink-0 text-xs text-muted">
-                    {r.level === "good"
-                      ? "● good"
-                      : r.level === "okay"
-                        ? "◐ okay"
-                        : r.level === "limit"
-                          ? "○ limit"
-                          : "—"}
+                    {levelLabel(r.level)}
                   </span>
                 </button>
               </li>

@@ -1,12 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   SWAP_CATEGORY_META,
   type Swap,
   type SwapCategory,
 } from "@/lib/swaps/types";
 import { matchSwaps } from "@/lib/swaps/match";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+import {
+  loadSavedSwaps,
+  migrateLocalSavedSwaps,
+  setSwapSaved,
+} from "@/lib/swaps/saved";
 import { SwapCard } from "./swap-card";
 
 const QUICK_PICKS = [
@@ -20,9 +26,54 @@ const QUICK_PICKS = [
   "sweet tea",
 ];
 
-export function SwapFinder({ swaps }: { swaps: Swap[] }) {
+export function SwapFinder({
+  swaps,
+  signedIn,
+}: {
+  swaps: Swap[];
+  signedIn: boolean;
+}) {
+  const remote = signedIn && isSupabaseConfigured;
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<SwapCategory | "all">("all");
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        if (remote) await migrateLocalSavedSwaps();
+        const ids = await loadSavedSwaps(remote);
+        if (active) setSavedIds(new Set(ids));
+      } catch {
+        /* leave empty — cards just show unsaved */
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [remote]);
+
+  async function toggleSave(id: string) {
+    const willSave = !savedIds.has(id);
+    // Optimistic: flip immediately, revert if the write fails.
+    setSavedIds((prev) => {
+      const next = new Set(prev);
+      if (willSave) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+    try {
+      await setSwapSaved(id, willSave, remote);
+    } catch {
+      setSavedIds((prev) => {
+        const next = new Set(prev);
+        if (willSave) next.delete(id);
+        else next.add(id);
+        return next;
+      });
+    }
+  }
 
   const results = useMemo(() => {
     if (query.trim()) return matchSwaps(swaps, query);
@@ -118,7 +169,12 @@ export function SwapFinder({ swaps }: { swaps: Swap[] }) {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {results.map((s) => (
-              <SwapCard key={s.id} swap={s} />
+              <SwapCard
+                key={s.id}
+                swap={s}
+                saved={savedIds.has(s.id)}
+                onToggleSave={() => toggleSave(s.id)}
+              />
             ))}
           </div>
         )}

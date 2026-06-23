@@ -80,9 +80,23 @@ export default async function AccountPage() {
             </span>
           </Link>
 
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <Link
+              href="/scan"
+              className="rounded-xl border border-line bg-cream px-3 py-2 text-sm font-semibold text-ink transition hover:border-brick/40"
+            >
+              📷 Saved scans →
+            </Link>
+            <Link
+              href="/swaps"
+              className="rounded-xl border border-line bg-cream px-3 py-2 text-sm font-semibold text-ink transition hover:border-brick/40"
+            >
+              ♥ Favorite swaps →
+            </Link>
+          </div>
+
           <p className="mt-5 text-sm font-semibold text-muted">Coming next</p>
           <ul className="mt-2 space-y-2 text-sm text-ink">
-            <li>• Your saved scans & food swaps</li>
             <li>• Your guided plan & weekly check-ins</li>
             <li>• Streaks and challenges</li>
           </ul>

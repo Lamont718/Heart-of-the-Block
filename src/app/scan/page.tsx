@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Scanner } from "@/components/scanner/scanner";
+import { getUser } from "@/lib/supabase/auth";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 
 export const metadata: Metadata = {
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
     "Scan a product's barcode and get an instant, plain-language heart-health read — then a better swap. Powered by Open Food Facts.",
 };
 
-export default function ScanPage() {
+export default async function ScanPage() {
+  const user = await getUser();
   return (
     <div className="container-block py-8 sm:py-10">
       <header className="max-w-2xl">
@@ -26,7 +28,7 @@ export default function ScanPage() {
       </header>
 
       <div className="mx-auto mt-6 max-w-xl">
-        <Scanner />
+        <Scanner signedIn={!!user} />
       </div>
 
       <div className="mx-auto mt-8 max-w-xl">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSwaps } from "@/lib/swaps/swaps";
+import { getUser } from "@/lib/supabase/auth";
 import { SwapFinder } from "@/components/swaps/swap-finder";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 
@@ -9,10 +10,8 @@ export const metadata: Metadata = {
     "Tell us what you eat and get realistic, culturally-rooted food swaps with the why — Caribbean, soul food, and everyday staples done heart-smart.",
 };
 
-export const revalidate = 3600;
-
 export default async function SwapsPage() {
-  const swaps = await getSwaps();
+  const [swaps, user] = await Promise.all([getSwaps(), getUser()]);
 
   return (
     <div className="container-block py-8 sm:py-10">
@@ -31,7 +30,7 @@ export default async function SwapsPage() {
       </header>
 
       <div className="mt-6">
-        <SwapFinder swaps={swaps} />
+        <SwapFinder swaps={swaps} signedIn={!!user} />
       </div>
 
       <div className="mt-8">
