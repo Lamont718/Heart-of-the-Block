@@ -25,19 +25,21 @@ Likely spots to double-check:
 - The footer tagline in both languages.
 
 ## Now translated as content (pending HT native review)
-- **The ABCs of Life page** (`/abcs`) — fully translated (ES solid, HT first pass).
-  Content lives in `src/i18n/content/abcs.ts`; the page renders the locale's text
-  server-side from the `hotb_locale` cookie. This is the model for translating the
-  rest: a per-locale content file + `getLocale()` in the page.
+Each has a per-locale content file in `src/i18n/content/`; the page renders the
+locale's text server-side from the `hotb_locale` cookie.
+- **The ABCs of Life** (`/abcs`) — `content/abcs.ts`
+- **Money for Produce** (`/money-for-produce`) — `content/money-for-produce.ts`
+- **Healthy Buys** (`/healthy-buys`) — `content/healthy-buys.ts` (all 42 staples)
+- **Recipes** (`/recipes` + each recipe) — `content/recipes.ts` (all 6 recipes)
+
+All Spanish is solid; **all Haitian Creole is a first pass** — review especially
+the **recipe cooking terms** (ingredient names, cooking verbs) and the cilantro
+note in the salmon bowl, plus food words like *bannann*, *pwa kongo*, *patat dous*.
 
 ## What is NOT translated yet (on purpose)
-**The rest of the health content stays in English** until a native speaker reviews
-it — we do not machine-translate medical content on a trust-based platform. Still
-English (next batches, lower-risk first):
-- Money-for-Produce / Healthy Buys / Directory body copy (practical, low-risk — good next)
-- Recipes (ingredients/steps)
-- Learn articles (long-form prose — do last, with the most review)
-- The medical-safety disclaimers (SPEC §6)
+- **Learn articles** (long-form medical prose — do last, with the most review)
+- **Directory** listings body copy
+- The **medical-safety disclaimers** (SPEC §6) — keep English until reviewed
 
 When a non-English language is selected, a banner tells visitors some pages are
 still in English (the `notice` string, already translated).
