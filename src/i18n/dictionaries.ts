@@ -41,10 +41,10 @@ export type Dict = {
 
 const en: Dict = {
   nav: {
-    abcs: "ABCs",
-    shop: "Shop",
-    healthyBuys: "Groceries",
-    eatForLess: "Save",
+    abcs: "The ABCs",
+    shop: "Where to shop",
+    healthyBuys: "Healthy buys",
+    eatForLess: "Eat for less",
     plans: "Plans",
     learn: "Learn",
     community: "Community",
@@ -82,9 +82,9 @@ const en: Dict = {
 const es: Dict = {
   nav: {
     abcs: "Los ABC",
-    shop: "Comprar",
-    healthyBuys: "Despensa",
-    eatForLess: "Ahorra",
+    shop: "Dónde comprar",
+    healthyBuys: "Compras saludables",
+    eatForLess: "Come por menos",
     plans: "Planes",
     learn: "Aprende",
     community: "Comunidad",
@@ -122,9 +122,9 @@ const es: Dict = {
 const ht: Dict = {
   nav: {
     abcs: "ABC yo",
-    shop: "Achte",
-    healthyBuys: "Pwovizyon",
-    eatForLess: "Ekonomize",
+    shop: "Kote pou achte",
+    healthyBuys: "Acha ki bon pou sante",
+    eatForLess: "Manje pou mwens",
     plans: "Plan yo",
     learn: "Aprann",
     community: "Kominote",

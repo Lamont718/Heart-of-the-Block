@@ -12,7 +12,7 @@ export function MobileNav({ user }: { user: User | null }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
         aria-label={open ? t.menu.close : t.menu.open}
