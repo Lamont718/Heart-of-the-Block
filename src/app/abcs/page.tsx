@@ -30,6 +30,12 @@ export default function ABCsPage() {
             {c.title}
           </h1>
           <p className="mt-3 text-lg text-muted">{c.intro}</p>
+          <Link
+            href="/get-screened"
+            className="mt-4 inline-block font-semibold text-brick-700 hover:underline"
+          >
+            {c.whereToCheck}
+          </Link>
         </div>
 
         {/* Origin credit */}

@@ -29,6 +29,7 @@ export type Dict = {
     tracker: string;
     heartRisk: string;
     guidedPlans: string;
+    getScreened: string;
     disclaimerLink: string;
     privacy: string;
     copyright: string;
@@ -66,6 +67,7 @@ const en: Dict = {
     tracker: "Numbers Tracker",
     heartRisk: "Heart-risk check",
     guidedPlans: "Guided plans",
+    getScreened: "Get screened",
     disclaimerLink: "Medical disclaimer",
     privacy: "Privacy",
     copyright: "Heart of the Block. A Brooklyn community project.",
@@ -105,6 +107,7 @@ const es: Dict = {
     tracker: "Registro de números",
     heartRisk: "Chequeo de riesgo cardíaco",
     guidedPlans: "Planes guiados",
+    getScreened: "Hazte un chequeo",
     disclaimerLink: "Aviso médico",
     privacy: "Privacidad",
     copyright: "Heart of the Block. Un proyecto comunitario de Brooklyn.",
@@ -144,6 +147,7 @@ const ht: Dict = {
     tracker: "Swiv nimewo ou yo",
     heartRisk: "Tcheke risk kè",
     guidedPlans: "Plan ki gen gid",
+    getScreened: "Fè tcheke",
     disclaimerLink: "Avètisman medikal",
     privacy: "Konfidansyalite",
     copyright: "Heart of the Block. Yon pwojè kominote Brooklyn.",

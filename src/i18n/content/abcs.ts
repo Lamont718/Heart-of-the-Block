@@ -28,6 +28,7 @@ export type ABCContent = {
   disclaimerBefore: string;
   disclaimerEmph: string;
   disclaimerAfter: string;
+  whereToCheck: string;
 };
 
 const en: ABCContent = {
@@ -91,6 +92,7 @@ const en: ABCContent = {
   disclaimerEmph: "general guideposts",
   disclaimerAfter:
     " (the kind the American Heart Association uses), not a diagnosis. Your numbers belong in a conversation with your doctor, who sees your whole picture. In an emergency, call ",
+  whereToCheck: "Where to get these checked — free & low-cost →",
 };
 
 // --- Spanish ---
@@ -155,6 +157,7 @@ const es: ABCContent = {
   disclaimerEmph: "guías generales",
   disclaimerAfter:
     " (del tipo que usa la Asociación Americana del Corazón), no un diagnóstico. Tus números pertenecen a una conversación con tu médico, que ve tu panorama completo. En una emergencia, llama al ",
+  whereToCheck: "Dónde chequear esto — gratis y a bajo costo →",
 };
 
 // --- Haitian Creole (FIRST PASS — needs native review) ---
@@ -219,6 +222,7 @@ const ht: ABCContent = {
   disclaimerEmph: "gid jeneral",
   disclaimerAfter:
     " (kalite American Heart Association itilize), se pa yon dyagnostik. Nimewo ou yo dwe nan yon konvèsasyon ak doktè ou, ki wè tout pòtre ou. Nan yon ijans, rele ",
+  whereToCheck: "Kote pou fè tcheke sa yo — gratis & pi bon mache →",
 };
 
 export const ABC_CONTENT: Record<Locale, ABCContent> = { en, es, ht };

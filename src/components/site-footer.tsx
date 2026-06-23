@@ -32,6 +32,7 @@ export function SiteFooter() {
             title={t.footer.exploreTitle}
             links={[
               { href: "/directory", label: t.nav.shop },
+              { href: "/get-screened", label: t.footer.getScreened },
               { href: "/plans", label: t.footer.guidedPlans },
               { href: "/learn", label: t.nav.learn },
               { href: "/community", label: t.nav.community },
