@@ -29,12 +29,12 @@ export function SiteHeader({ user }: { user: User | null }) {
           <Wordmark />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-ink transition hover:bg-brick-100 hover:text-brick-700"
+              className="shrink-0 whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-semibold text-ink transition hover:bg-brick-100 hover:text-brick-700"
             >
               {t.nav[link.key]}
             </Link>
