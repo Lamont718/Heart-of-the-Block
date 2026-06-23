@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getUser } from "@/lib/supabase/auth";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
+import { ProfileForm } from "./profile-form";
 
 export const metadata: Metadata = {
   title: "My account",
@@ -49,14 +50,14 @@ export default async function AccountPage() {
       <div className="grid gap-5 md:grid-cols-2">
         <section className="card">
           <h2 className="font-display text-lg font-bold text-ink">Profile</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <Row label="Email" value={user.email ?? "—"} />
-            <Row label="Name" value={displayName ?? "Not set yet"} />
-            <Row label="Neighborhood" value={neighborhood ?? "Not set yet"} />
-          </dl>
-          <p className="mt-4 text-sm text-muted">
-            Profile editing (name & neighborhood) is coming soon.
+          <p className="mt-1 text-sm text-muted">
+            Tell us what to call you and where you’re repping.
           </p>
+          <ProfileForm
+            email={user.email ?? "—"}
+            displayName={displayName ?? ""}
+            neighborhood={neighborhood ?? ""}
+          />
         </section>
 
         <section className="card flex flex-col">
@@ -109,7 +110,6 @@ export default async function AccountPage() {
 
           <p className="mt-5 text-sm font-semibold text-muted">Coming next</p>
           <ul className="mt-2 space-y-2 text-sm text-ink">
-            <li>• Editable profile (name & neighborhood)</li>
             <li>• Real challenges with neighbors on a leaderboard</li>
           </ul>
           <form action="/auth/signout" method="post" className="mt-auto pt-6">
@@ -123,15 +123,6 @@ export default async function AccountPage() {
       <div className="mt-8">
         <DisclaimerBanner variant="inline" />
       </div>
-    </div>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between gap-4 border-b border-line pb-2 last:border-0">
-      <dt className="text-muted">{label}</dt>
-      <dd className="text-right font-semibold text-ink">{value}</dd>
     </div>
   );
 }
