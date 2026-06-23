@@ -4,15 +4,18 @@ import Link from "next/link";
 import { useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { NAV_LINKS } from "./site-header";
+import { LanguageSwitcher } from "./language-switcher";
+import { useT } from "@/i18n/provider";
 
 export function MobileNav({ user }: { user: User | null }) {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
 
   return (
     <div className="md:hidden">
       <button
         type="button"
-        aria-label={open ? "Close menu" : "Open menu"}
+        aria-label={open ? t.menu.close : t.menu.open}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface text-ink"
@@ -56,9 +59,13 @@ export function MobileNav({ user }: { user: User | null }) {
                   onClick={() => setOpen(false)}
                   className="rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-brick-100"
                 >
-                  {link.label}
+                  {t.nav[link.key]}
                 </Link>
               ))}
+              <hr className="my-2 border-line" />
+              <div className="px-1 pb-1">
+                <LanguageSwitcher className="w-full [&>select]:w-full" />
+              </div>
               <hr className="my-2 border-line" />
               {user ? (
                 <>
@@ -67,14 +74,14 @@ export function MobileNav({ user }: { user: User | null }) {
                     onClick={() => setOpen(false)}
                     className="rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-brick-100"
                   >
-                    My account
+                    {t.auth.myAccount}
                   </Link>
                   <form action="/auth/signout" method="post">
                     <button
                       type="submit"
                       className="w-full rounded-xl px-4 py-3 text-left text-base font-semibold text-brick-700 hover:bg-brick-100"
                     >
-                      Sign out
+                      {t.auth.signOut}
                     </button>
                   </form>
                 </>
@@ -85,14 +92,14 @@ export function MobileNav({ user }: { user: User | null }) {
                     onClick={() => setOpen(false)}
                     className="btn-secondary w-full"
                   >
-                    Sign in
+                    {t.auth.signIn}
                   </Link>
                   <Link
                     href="/login?mode=signup"
                     onClick={() => setOpen(false)}
                     className="btn-primary mt-2 w-full"
                   >
-                    Get started
+                    {t.auth.getStarted}
                   </Link>
                 </>
               )}

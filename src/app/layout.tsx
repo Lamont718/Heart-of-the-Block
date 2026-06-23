@@ -4,6 +4,8 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { FirstRunModal } from "@/components/first-run-modal";
+import { LanguageProvider } from "@/i18n/provider";
+import { LanguageNotice } from "@/components/language-notice";
 import { getUser } from "@/lib/supabase/auth";
 
 const display = Bricolage_Grotesque({
@@ -71,11 +73,14 @@ export default async function RootLayout({
         >
           Skip to content
         </a>
-        <SiteHeader user={user} />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <LanguageProvider>
+          <SiteHeader user={user} />
+          <LanguageNotice />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+        </LanguageProvider>
         <FirstRunModal />
       </body>
     </html>

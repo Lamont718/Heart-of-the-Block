@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Wordmark } from "./logo";
 import { DisclaimerBanner } from "./disclaimer-banner";
+import { useT } from "@/i18n/provider";
 
 export function SiteFooter() {
+  const { t } = useT();
   return (
     <footer className="border-t border-line bg-surface">
       <div className="container-block py-12">
@@ -12,47 +16,44 @@ export function SiteFooter() {
         <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <Wordmark />
-            <p className="mt-3 max-w-xs text-sm text-muted">
-              Brooklyn heart health, the way you live. Made of the community, not
-              outside it.
-            </p>
+            <p className="mt-3 max-w-xs text-sm text-muted">{t.footer.tagline}</p>
           </div>
 
           <FooterCol
-            title="The tools"
+            title={t.footer.toolsTitle}
             links={[
-              { href: "/swaps", label: "Food Swap Finder" },
-              { href: "/scan", label: "Barcode Scanner" },
-              { href: "/tracker", label: "Numbers Tracker" },
-              { href: "/#tools", label: "Heart-risk check" },
+              { href: "/swaps", label: t.footer.swaps },
+              { href: "/scan", label: t.footer.scanner },
+              { href: "/tracker", label: t.footer.tracker },
+              { href: "/#tools", label: t.footer.heartRisk },
             ]}
           />
           <FooterCol
-            title="Explore"
+            title={t.footer.exploreTitle}
             links={[
-              { href: "/directory", label: "Where to shop" },
-              { href: "/plans", label: "Guided plans" },
-              { href: "/learn", label: "Learn" },
-              { href: "/community", label: "Community" },
+              { href: "/directory", label: t.nav.shop },
+              { href: "/plans", label: t.footer.guidedPlans },
+              { href: "/learn", label: t.nav.learn },
+              { href: "/community", label: t.nav.community },
             ]}
           />
           <FooterCol
-            title="About"
+            title={t.footer.aboutTitle}
             links={[
-              { href: "/disclaimer", label: "Medical disclaimer" },
-              { href: "/privacy", label: "Privacy" },
-              { href: "/login", label: "Sign in" },
+              { href: "/disclaimer", label: t.footer.disclaimerLink },
+              { href: "/privacy", label: t.footer.privacy },
+              { href: "/login", label: t.auth.signIn },
             ]}
           />
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-line pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Heart of the Block. A Brooklyn
-            community project.
+            © {new Date().getFullYear()} {t.footer.copyright}
           </p>
           <p>
-            If this is an emergency, call <strong className="text-ink">911</strong>.
+            {t.footer.emergencyPre}{" "}
+            <strong className="text-ink">911</strong>.
           </p>
         </div>
       </div>
@@ -74,7 +75,7 @@ function FooterCol({
       </h2>
       <ul className="mt-3 space-y-2">
         {links.map((l) => (
-          <li key={l.label}>
+          <li key={l.href}>
             <Link
               href={l.href}
               className="text-sm text-muted transition hover:text-brick-700"

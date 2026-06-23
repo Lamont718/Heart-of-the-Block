@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/i18n/provider";
 
 export function UserMenu({ email }: { email: string }) {
+  const { t } = useT();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const initial = (email[0] ?? "?").toUpperCase();
@@ -44,7 +46,7 @@ export function UserMenu({ email }: { email: string }) {
             className="block rounded-lg px-3 py-2 text-sm font-semibold text-ink hover:bg-cream"
             onClick={() => setOpen(false)}
           >
-            My account
+            {t.auth.myAccount}
           </Link>
           <form action="/auth/signout" method="post">
             <button
@@ -52,7 +54,7 @@ export function UserMenu({ email }: { email: string }) {
               role="menuitem"
               className="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-brick-700 hover:bg-brick-100"
             >
-              Sign out
+              {t.auth.signOut}
             </button>
           </form>
         </div>
