@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   METRIC_META,
   type Metric,
@@ -8,14 +8,18 @@ import {
   type WeightGoal,
 } from "@/lib/tracker/types";
 import {
-  addReading,
-  clearWeightGoal,
-  deleteReading,
-  getReadings,
-  getWeightGoal,
-  setWeightGoal,
-} from "@/lib/tracker/storage";
+  loadReadings,
+  loadWeightGoal,
+  migrateLocalToAccount,
+  removeReading,
+  removeWeightGoal,
+  saveReading,
+  saveWeightGoal,
+} from "@/lib/tracker/data";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { TrendChart, type Series } from "./trend-chart";
+
+type ReadingInput = Omit<Reading, "id" | "createdAt">;
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const fmtDate = (iso: string) => {
@@ -27,21 +31,96 @@ const fmtDate = (iso: string) => {
 };
 
 export function TrackerApp({ signedIn }: { signedIn: boolean }) {
+  // Synced to the account when signed in (and Supabase is wired up); otherwise
+  // local-first on this device.
+  const remote = signedIn && isSupabaseConfigured;
   const [metric, setMetric] = useState<Metric>("a1c");
-  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [readings, setReadings] = useState<Reading[]>([]);
   const [goal, setGoal] = useState<WeightGoal | null>(null);
+  const [error, setError] = useState("");
+  const migrated = useRef(false);
 
-  function refresh(m: Metric) {
-    setReadings(getReadings(m));
-    setGoal(getWeightGoal());
-  }
+  const refresh = useCallback(
+    async (m: Metric) => {
+      const [rs, g] = await Promise.all([
+        loadReadings(m, remote),
+        loadWeightGoal(remote),
+      ]);
+      setReadings(rs);
+      setGoal(g);
+    },
+    [remote],
+  );
 
   useEffect(() => {
-    setMounted(true);
-    refresh(metric);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metric]);
+    let active = true;
+    (async () => {
+      setLoading(true);
+      setError("");
+      try {
+        // On first signed-in load, lift any locally-tracked numbers into the
+        // account (safe no-op if the account already has data).
+        if (remote && !migrated.current) {
+          migrated.current = true;
+          await migrateLocalToAccount();
+        }
+        await refresh(metric);
+      } catch {
+        if (active)
+          setError(
+            "We couldn’t load your numbers just now. Check your connection and try again.",
+          );
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [metric, remote, refresh]);
+
+  async function handleAdd(input: ReadingInput): Promise<boolean> {
+    setError("");
+    try {
+      await saveReading(input, remote);
+      await refresh(metric);
+      return true;
+    } catch {
+      setError("We couldn’t save that just now. Check your connection and try again.");
+      return false;
+    }
+  }
+
+  async function handleDelete(id: string) {
+    setError("");
+    try {
+      await removeReading(id, remote);
+      await refresh(metric);
+    } catch {
+      setError("We couldn’t delete that just now. Try again in a moment.");
+    }
+  }
+
+  async function handleSetGoal(g: WeightGoal) {
+    setError("");
+    try {
+      await saveWeightGoal(g, remote);
+      await refresh(metric);
+    } catch {
+      setError("We couldn’t save your goal just now. Try again in a moment.");
+    }
+  }
+
+  async function handleClearGoal() {
+    setError("");
+    try {
+      await removeWeightGoal(remote);
+      await refresh(metric);
+    } catch {
+      setError("We couldn’t update your goal just now. Try again in a moment.");
+    }
+  }
 
   return (
     <div>
@@ -69,18 +148,30 @@ export function TrackerApp({ signedIn }: { signedIn: boolean }) {
         ))}
       </div>
 
-      {!mounted ? (
-        <div className="card mt-5 text-muted">Loading your numbers…</div>
+      {error && (
+        <p
+          role="alert"
+          className="mt-5 rounded-xl border border-brick/30 bg-brick-100 p-3 text-sm font-semibold text-brick-700"
+        >
+          {error}
+        </p>
+      )}
+
+      {loading ? (
+        <div className="card mt-5 text-muted">
+          {remote ? "Loading your account…" : "Loading your numbers…"}
+        </div>
       ) : (
         <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           {/* Left: log form + (weight) goal */}
           <div className="space-y-5">
-            <LogForm metric={metric} onAdded={() => refresh(metric)} />
+            <LogForm metric={metric} onAdd={handleAdd} />
             {metric === "weight" && (
               <WeightGoalCard
                 goal={goal}
                 readings={readings}
-                onChange={() => refresh(metric)}
+                onSetGoal={handleSetGoal}
+                onClearGoal={handleClearGoal}
               />
             )}
           </div>
@@ -91,7 +182,7 @@ export function TrackerApp({ signedIn }: { signedIn: boolean }) {
             <HistoryCard
               metric={metric}
               readings={readings}
-              onDeleted={() => refresh(metric)}
+              onDelete={handleDelete}
             />
           </div>
         </div>
@@ -119,10 +210,10 @@ export function TrackerApp({ signedIn }: { signedIn: boolean }) {
 
 function LogForm({
   metric,
-  onAdded,
+  onAdd,
 }: {
   metric: Metric;
-  onAdded: () => void;
+  onAdd: (input: ReadingInput) => Promise<boolean>;
 }) {
   const [date, setDate] = useState(todayISO());
   const [a, setA] = useState("");
@@ -130,6 +221,7 @@ function LogForm({
   const [c, setC] = useState("");
   const [unit, setUnit] = useState("lb");
   const [err, setErr] = useState("");
+  const [saving, setSaving] = useState(false);
 
   // Reset fields when switching metric.
   useEffect(() => {
@@ -140,27 +232,28 @@ function LogForm({
     setDate(todayISO());
   }, [metric]);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     setErr("");
     const num = (v: string) => (v.trim() === "" ? NaN : Number(v));
 
+    let input: ReadingInput;
     if (metric === "a1c") {
       const value = num(a);
       if (!(value > 0)) return setErr("Enter your A1C number.");
       if (value > 25)
         return setErr("That looks high for an A1C — it's usually a number like 5.6.");
-      addReading({ metric, date, values: { value } });
+      input = { metric, date, values: { value } };
     } else if (metric === "weight") {
       const value = num(a);
       if (!(value > 0)) return setErr("Enter a weight.");
-      addReading({ metric, date, values: { value }, unit });
+      input = { metric, date, values: { value }, unit };
     } else if (metric === "bp") {
       const systolic = num(a);
       const diastolic = num(b);
       if (!(systolic > 0) || !(diastolic > 0))
         return setErr("Enter both top and bottom numbers.");
-      addReading({ metric, date, values: { systolic, diastolic } });
+      input = { metric, date, values: { systolic, diastolic } };
     } else {
       const total = num(a);
       const ldl = num(b);
@@ -169,12 +262,17 @@ function LogForm({
       const values: Record<string, number> = { total };
       if (ldl > 0) values.ldl = ldl;
       if (hdl > 0) values.hdl = hdl;
-      addReading({ metric, date, values });
+      input = { metric, date, values };
     }
-    setA("");
-    setB("");
-    setC("");
-    onAdded();
+
+    setSaving(true);
+    const ok = await onAdd(input);
+    setSaving(false);
+    if (ok) {
+      setA("");
+      setB("");
+      setC("");
+    }
   }
 
   return (
@@ -331,8 +429,8 @@ function LogForm({
         </p>
       )}
 
-      <button type="submit" className="btn-primary w-full">
-        Add entry
+      <button type="submit" className="btn-primary w-full" disabled={saving}>
+        {saving ? "Adding…" : "Add entry"}
       </button>
     </form>
   );
@@ -473,11 +571,13 @@ function summarize(metric: Metric, readings: Reading[]) {
 function WeightGoalCard({
   goal,
   readings,
-  onChange,
+  onSetGoal,
+  onClearGoal,
 }: {
   goal: WeightGoal | null;
   readings: Reading[];
-  onChange: () => void;
+  onSetGoal: (goal: WeightGoal) => Promise<void>;
+  onClearGoal: () => Promise<void>;
 }) {
   const [target, setTarget] = useState("");
   const [unit, setUnit] = useState("lb");
@@ -485,18 +585,17 @@ function WeightGoalCard({
   if (!goal) {
     return (
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const t = Number(target);
           if (!(t > 0)) return;
-          setWeightGoal({
+          await onSetGoal({
             targetWeight: t,
             unit,
             startWeight: readings[readings.length - 1]?.values.value,
             startDate: todayISO(),
           });
           setTarget("");
-          onChange();
         }}
         className="card space-y-3"
       >
@@ -564,10 +663,7 @@ function WeightGoalCard({
           Goal: {goal.targetWeight} {goal.unit}
         </h2>
         <button
-          onClick={() => {
-            clearWeightGoal();
-            onChange();
-          }}
+          onClick={() => onClearGoal()}
           className="text-sm font-semibold text-muted hover:text-brick-700"
         >
           Clear
@@ -593,11 +689,11 @@ function WeightGoalCard({
 function HistoryCard({
   metric,
   readings,
-  onDeleted,
+  onDelete,
 }: {
   metric: Metric;
   readings: Reading[];
-  onDeleted: () => void;
+  onDelete: (id: string) => Promise<void>;
 }) {
   if (readings.length === 0) return null;
   const rows = [...readings].reverse();
@@ -620,10 +716,7 @@ function HistoryCard({
               <p className="text-xs text-muted">{fmtDate(r.date)}</p>
             </div>
             <button
-              onClick={() => {
-                deleteReading(r.id);
-                onDeleted();
-              }}
+              onClick={() => onDelete(r.id)}
               aria-label={`Delete entry from ${fmtDate(r.date)}`}
               className="rounded-lg px-2 py-1 text-sm font-semibold text-muted hover:bg-brick-100 hover:text-brick-700"
             >

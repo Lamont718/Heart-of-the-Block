@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -40,8 +41,8 @@ export default async function AccountPage() {
           Welcome, {greeting}
         </h1>
         <p className="mt-2 text-muted">
-          This is your home base. Your tools, numbers, and streaks will live
-          here as they roll out.
+          This is your home base. Your numbers now follow you here — log them on
+          your phone, see them on your computer.
         </p>
       </header>
 
@@ -54,17 +55,34 @@ export default async function AccountPage() {
             <Row label="Neighborhood" value={neighborhood ?? "Not set yet"} />
           </dl>
           <p className="mt-4 text-sm text-muted">
-            Profile editing arrives with the tracker in a later step.
+            Profile editing (name & neighborhood) is coming soon.
           </p>
         </section>
 
         <section className="card flex flex-col">
           <h2 className="font-display text-lg font-bold text-ink">
-            Coming to your account
+            Saved to your account
           </h2>
-          <ul className="mt-4 space-y-2 text-sm text-ink">
+          <Link
+            href="/tracker"
+            className="mt-4 flex items-center gap-3 rounded-xl border border-teal/30 bg-teal-100 p-3 transition hover:-translate-y-0.5 hover:shadow-lift"
+          >
+            <span aria-hidden className="text-2xl">
+              📈
+            </span>
+            <span>
+              <span className="block font-display font-bold text-ink">
+                Your numbers — synced
+              </span>
+              <span className="block text-sm text-muted">
+                A1C, blood pressure, cholesterol & weight, on every device →
+              </span>
+            </span>
+          </Link>
+
+          <p className="mt-5 text-sm font-semibold text-muted">Coming next</p>
+          <ul className="mt-2 space-y-2 text-sm text-ink">
             <li>• Your saved scans & food swaps</li>
-            <li>• Cholesterol / BP / weight trends</li>
             <li>• Your guided plan & weekly check-ins</li>
             <li>• Streaks and challenges</li>
           </ul>
