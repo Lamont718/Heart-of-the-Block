@@ -93,12 +93,24 @@ export default async function AccountPage() {
             >
               ♥ Favorite swaps →
             </Link>
+            <Link
+              href="/plans"
+              className="rounded-xl border border-line bg-cream px-3 py-2 text-sm font-semibold text-ink transition hover:border-brick/40"
+            >
+              🍽️ Plan progress →
+            </Link>
+            <Link
+              href="/community"
+              className="rounded-xl border border-line bg-cream px-3 py-2 text-sm font-semibold text-ink transition hover:border-brick/40"
+            >
+              🔥 Streaks & challenges →
+            </Link>
           </div>
 
           <p className="mt-5 text-sm font-semibold text-muted">Coming next</p>
           <ul className="mt-2 space-y-2 text-sm text-ink">
-            <li>• Your guided plan & weekly check-ins</li>
-            <li>• Streaks and challenges</li>
+            <li>• Editable profile (name & neighborhood)</li>
+            <li>• Real challenges with neighbors on a leaderboard</li>
           </ul>
           <form action="/auth/signout" method="post" className="mt-auto pt-6">
             <button type="submit" className="btn-secondary w-full">

@@ -7,30 +7,73 @@ import {
   type Plan,
   type PlanDay,
 } from "@/lib/plans/types";
-import { getCompleted, resetPlan, toggleDay } from "@/lib/plans/progress";
+import {
+  loadCompleted,
+  migrateLocalPlan,
+  resetPlan,
+  toggleDay,
+} from "@/lib/plans/data";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 const SLOT_ORDER: MealSlot[] = ["breakfast", "lunch", "dinner", "snack"];
 
-export function PlanRunner({ plan }: { plan: Plan }) {
+export function PlanRunner({
+  plan,
+  signedIn,
+}: {
+  plan: Plan;
+  signedIn: boolean;
+}) {
+  const remote = signedIn && isSupabaseConfigured;
   const [mounted, setMounted] = useState(false);
   const [completed, setCompleted] = useState<number[]>([]);
 
   useEffect(() => {
-    setMounted(true);
-    setCompleted(getCompleted(plan.slug));
-  }, [plan.slug]);
+    let active = true;
+    (async () => {
+      try {
+        if (remote) await migrateLocalPlan(plan.slug);
+        const days = await loadCompleted(plan.slug, remote);
+        if (active) setCompleted(days);
+      } catch {
+        /* leave empty on failure */
+      } finally {
+        if (active) setMounted(true);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [plan.slug, remote]);
 
   const total = plan.days.length;
   const doneCount = completed.length;
   const pct = total ? Math.round((doneCount / total) * 100) : 0;
   const allDone = mounted && doneCount === total;
 
-  function onToggle(index: number) {
-    setCompleted(toggleDay(plan.slug, index));
+  async function onToggle(index: number) {
+    const wasDone = completed.includes(index);
+    // Optimistic flip, revert on failure.
+    setCompleted((prev) =>
+      wasDone ? prev.filter((i) => i !== index) : [...prev, index].sort((a, b) => a - b),
+    );
+    try {
+      const next = await toggleDay(plan.slug, index, wasDone, remote);
+      setCompleted(next);
+    } catch {
+      setCompleted((prev) =>
+        wasDone ? [...prev, index].sort((a, b) => a - b) : prev.filter((i) => i !== index),
+      );
+    }
   }
-  function onReset() {
-    resetPlan(plan.slug);
+  async function onReset() {
+    const prev = completed;
     setCompleted([]);
+    try {
+      await resetPlan(plan.slug, remote);
+    } catch {
+      setCompleted(prev);
+    }
   }
 
   return (

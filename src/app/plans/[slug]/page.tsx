@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPlanBySlug, getPlans } from "@/lib/plans/plans";
 import { PLAN_TAG_META } from "@/lib/plans/types";
+import { getUser } from "@/lib/supabase/auth";
 import { PlanRunner } from "@/components/plans/plan-runner";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 
@@ -28,6 +29,8 @@ export default async function PlanPage({
 }) {
   const plan = await getPlanBySlug(params.slug);
   if (!plan) notFound();
+
+  const user = await getUser();
 
   return (
     <div className="container-block max-w-2xl py-8 sm:py-10">
@@ -56,7 +59,7 @@ export default async function PlanPage({
       <p className="mt-2 text-muted">{plan.description}</p>
 
       <div className="mt-6">
-        <PlanRunner plan={plan} />
+        <PlanRunner plan={plan} signedIn={!!user} />
       </div>
 
       <div className="mt-8">

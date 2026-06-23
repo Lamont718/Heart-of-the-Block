@@ -390,6 +390,39 @@ drop policy if exists "cp: owner write" on public.challenge_participants;
 create policy "cp: owner write" on public.challenge_participants
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
+-- ===========================================================================
+-- 11b. SLUG-KEYED PROGRESS  (plans & challenges are seed content, not DB rows,
+--      so these track completion by slug + index/date instead of UUID FKs.)
+-- ===========================================================================
+
+-- One row per completed plan day (plan_slug + day_index).
+create table if not exists public.user_plan_days (
+  user_id    uuid not null references auth.users (id) on delete cascade,
+  plan_slug  text not null,
+  day_index  int  not null,
+  created_at timestamptz not null default now(),
+  primary key (user_id, plan_slug, day_index)
+);
+
+alter table public.user_plan_days enable row level security;
+drop policy if exists "user_plan_days: owner all" on public.user_plan_days;
+create policy "user_plan_days: owner all" on public.user_plan_days
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- One row per day a user made progress on a challenge (challenge_slug + date).
+create table if not exists public.challenge_days (
+  user_id        uuid not null references auth.users (id) on delete cascade,
+  challenge_slug text not null,
+  progressed_on  date not null default current_date,
+  created_at     timestamptz not null default now(),
+  primary key (user_id, challenge_slug, progressed_on)
+);
+
+alter table public.challenge_days enable row level security;
+drop policy if exists "challenge_days: owner all" on public.challenge_days;
+create policy "challenge_days: owner all" on public.challenge_days
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
 -- ============================================================================
 -- End of schema.
 -- ============================================================================

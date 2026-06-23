@@ -5,18 +5,21 @@ import { CHALLENGES_SEED } from "@/data/challenges-seed";
 import {
   type Activity,
   type ActivityType,
-  addActivity,
-  checkInToday,
   computePoints,
   computeStreak,
-  getActivities,
-  getChallengeState,
-  getCheckIns,
-  hasCheckedInToday,
   levelForPoints,
-  tapChallenge,
   todayISO,
 } from "@/lib/community/storage";
+import {
+  type ChallengeState,
+  type CommunityState,
+  addActivity,
+  checkIn,
+  loadCommunity,
+  migrateLocalCommunity,
+  tapChallenge,
+} from "@/lib/community/data";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { CrossToolNudges } from "./cross-tool-nudges";
 
 const ACTIVITY_LABEL: Record<ActivityType, string> = {
@@ -26,26 +29,74 @@ const ACTIVITY_LABEL: Record<ActivityType, string> = {
 };
 
 export function CommunityHub({ signedIn }: { signedIn: boolean }) {
+  const remote = signedIn && isSupabaseConfigured;
   const [mounted, setMounted] = useState(false);
   const [checkIns, setCheckIns] = useState<string[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [challenges, setChallenges] = useState(getChallengeStateSafe);
+  const [challenges, setChallenges] = useState<ChallengeState>({});
 
-  function refresh() {
-    setCheckIns(getCheckIns());
-    setActivities(getActivities());
-    setChallenges(getChallengeState());
+  function applyState(s: CommunityState) {
+    setCheckIns(s.checkIns);
+    setActivities(s.activities);
+    setChallenges(s.challenges);
+  }
+
+  async function refresh() {
+    applyState(await loadCommunity(remote));
   }
 
   useEffect(() => {
-    setMounted(true);
-    refresh();
-  }, []);
+    let active = true;
+    (async () => {
+      try {
+        if (remote) await migrateLocalCommunity();
+        const s = await loadCommunity(remote);
+        if (active) applyState(s);
+      } catch {
+        /* leave empty on failure */
+      } finally {
+        if (active) setMounted(true);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [remote]);
 
   const streak = computeStreak(checkIns);
   const points = computePoints(checkIns, activities, challenges);
   const { level, label } = levelForPoints(points);
-  const checkedToday = mounted && hasCheckedInToday();
+  const checkedToday = mounted && checkIns.includes(todayISO());
+
+  async function onCheckIn() {
+    setCheckIns((prev) =>
+      prev.includes(todayISO()) ? prev : [...prev, todayISO()],
+    );
+    try {
+      await checkIn(remote);
+      await refresh();
+    } catch {
+      await refresh();
+    }
+  }
+
+  async function onTapChallenge(id: string) {
+    try {
+      await tapChallenge(id, remote);
+      await refresh();
+    } catch {
+      /* no-op; state unchanged */
+    }
+  }
+
+  async function onLogActivity(input: { type: ActivityType; minutes?: number }) {
+    try {
+      await addActivity(input, remote);
+      await refresh();
+    } catch {
+      /* no-op */
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -86,10 +137,7 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
           </div>
           {!checkedToday && (
             <button
-              onClick={() => {
-                checkInToday();
-                refresh();
-              }}
+              onClick={onCheckIn}
               disabled={!mounted}
               className="btn-primary shrink-0"
             >
@@ -123,7 +171,11 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
       </div>
 
       {/* Activity log */}
-      <ActivityCard activities={mounted ? activities : []} onLogged={refresh} mounted={mounted} />
+      <ActivityCard
+        activities={mounted ? activities : []}
+        onLog={onLogActivity}
+        mounted={mounted}
+      />
 
       {/* Challenges */}
       <section>
@@ -164,10 +216,7 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
                     <span className="text-sm font-bold text-good">Done 🎉</span>
                   ) : (
                     <button
-                      onClick={() => {
-                        tapChallenge(c.id);
-                        refresh();
-                      }}
+                      onClick={() => onTapChallenge(c.id)}
                       disabled={!mounted || tappedToday}
                       className="btn-secondary !min-h-[36px] !px-3 !py-1.5 text-sm"
                     >
@@ -207,24 +256,26 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
 
 function ActivityCard({
   activities,
-  onLogged,
+  onLog,
   mounted,
 }: {
   activities: Activity[];
-  onLogged: () => void;
+  onLog: (input: { type: ActivityType; minutes?: number }) => Promise<void>;
   mounted: boolean;
 }) {
   const [type, setType] = useState<ActivityType>("walk");
   const [minutes, setMinutes] = useState("");
   const [flash, setFlash] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  function log() {
+  async function log() {
     const mins = minutes.trim() ? Number(minutes) : undefined;
-    addActivity({ type, minutes: mins && mins > 0 ? mins : undefined });
+    setSaving(true);
+    await onLog({ type, minutes: mins && mins > 0 ? mins : undefined });
+    setSaving(false);
     setMinutes("");
     setFlash(true);
     setTimeout(() => setFlash(false), 1500);
-    onLogged();
   }
 
   return (
@@ -262,8 +313,12 @@ function ActivityCard({
           aria-label="Minutes"
           className="field"
         />
-        <button onClick={log} disabled={!mounted} className="btn-primary shrink-0">
-          {flash ? "Logged ✓" : "Log it"}
+        <button
+          onClick={log}
+          disabled={!mounted || saving}
+          className="btn-primary shrink-0"
+        >
+          {flash ? "Logged ✓" : saving ? "Logging…" : "Log it"}
         </button>
       </div>
 
@@ -286,9 +341,6 @@ function ActivityCard({
   );
 }
 
-function getChallengeStateSafe() {
-  return {} as ReturnType<typeof getChallengeState>;
-}
 function emptyWeek() {
   return Array.from({ length: 7 }, () => ({ date: "", hit: false }));
 }
