@@ -2,6 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getLocale } from "@/i18n/server";
 import { GET_SCREENED } from "@/i18n/content/get-screened";
+import { upcomingEvents, type ScreeningEvent } from "@/data/events-seed";
+
+const LOCALE_TAG = { en: "en-US", es: "es-US", ht: "fr-FR" } as const;
+
+function formatEventDate(iso: string, locale: keyof typeof LOCALE_TAG): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(LOCALE_TAG[locale], {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+}
 
 export const metadata: Metadata = {
   title: "Where to check your numbers | Heart of the Block",
@@ -10,7 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default function GetScreenedPage() {
-  const c = GET_SCREENED[getLocale()];
+  const locale = getLocale();
+  const c = GET_SCREENED[locale];
+  const today = new Date().toISOString().slice(0, 10);
+  const events = upcomingEvents(today);
 
   return (
     <div className="py-12 sm:py-16">
@@ -56,8 +71,33 @@ export default function GetScreenedPage() {
           ))}
         </div>
 
+        {/* Upcoming screenings & events */}
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-extrabold text-ink">
+            {c.events.title}
+          </h2>
+          <p className="mt-2 max-w-2xl text-muted">{c.events.intro}</p>
+
+          {events.length === 0 ? (
+            <div className="mt-5 rounded-2xl border border-line bg-cream p-6 text-sm text-muted">
+              {c.events.empty}
+            </div>
+          ) : (
+            <div className="mt-5 space-y-4">
+              {events.map((e) => (
+                <EventCard
+                  key={e.id}
+                  event={e}
+                  c={c.events}
+                  dateText={formatEventDate(e.date, locale)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* Tracker CTA */}
-        <div className="mt-8 rounded-2xl border border-teal/30 bg-teal-100 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
+        <div className="mt-12 rounded-2xl border border-teal/30 bg-teal-100 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
           <div>
             <h2 className="font-display text-xl font-bold text-ink">
               {c.trackTitle}
@@ -77,6 +117,71 @@ export default function GetScreenedPage() {
           {c.disclaimer}
         </p>
       </div>
+    </div>
+  );
+}
+
+function EventCard({
+  event,
+  c,
+  dateText,
+}: {
+  event: ScreeningEvent;
+  c: (typeof GET_SCREENED)["en"]["events"];
+  dateText: string;
+}) {
+  const where = [event.locationName, event.address, event.neighborhood]
+    .filter(Boolean)
+    .join(" · ");
+  return (
+    <article className="card">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <h3 className="font-display text-lg font-bold text-ink">
+          {event.title}
+        </h3>
+        {event.tentative && (
+          <span className="pill bg-gold-100 text-xs text-ink">{c.planned}</span>
+        )}
+      </div>
+
+      <dl className="mt-3 space-y-2 text-sm">
+        <Detail label={c.when}>
+          {dateText}
+          {event.time ? ` · ${event.time}` : ""}
+        </Detail>
+        <Detail label={c.where}>{where}</Detail>
+        <Detail label={c.offered}>{event.offered.join(" · ")}</Detail>
+        {event.cost && <Detail label={c.cost}>{event.cost}</Detail>}
+      </dl>
+
+      {event.note && <p className="mt-3 text-sm text-muted">{event.note}</p>}
+      <p className="mt-2 text-sm font-semibold text-muted">{event.host}</p>
+
+      {event.link && (
+        <a
+          href={event.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-block text-sm font-semibold text-brick-700 hover:underline"
+        >
+          More info ↗
+        </a>
+      )}
+    </article>
+  );
+}
+
+function Detail({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex gap-2">
+      <dt className="shrink-0 font-semibold text-ink">{label}:</dt>
+      <dd className="text-muted">{children}</dd>
     </div>
   );
 }

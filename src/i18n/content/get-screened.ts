@@ -22,6 +22,17 @@ export type GsContent = {
   trackBody: string;
   trackButton: string;
   disclaimer: string;
+  /** "Upcoming screenings & events" section. */
+  events: {
+    title: string;
+    intro: string;
+    empty: string;
+    when: string;
+    where: string;
+    offered: string;
+    cost: string;
+    planned: string;
+  };
 };
 
 const NYC_CARE = "https://www.nyccare.nyc/";
@@ -74,6 +85,18 @@ const en: GsContent = {
   trackButton: "Open the tracker",
   disclaimer:
     "This points you to places to get screened — it isn’t medical care or a diagnosis. In an emergency, call 911.",
+  events: {
+    title: "Upcoming screenings & events near you",
+    intro:
+      "Free heart-health checks happening around the neighborhood. We add events here as they’re confirmed.",
+    empty:
+      "No events posted right now. Check the places above any time — and check back here as local screening days get added.",
+    when: "When",
+    where: "Where",
+    offered: "What’s offered",
+    cost: "Cost",
+    planned: "Planned",
+  },
 };
 
 const es: GsContent = {
@@ -123,6 +146,18 @@ const es: GsContent = {
   trackButton: "Abre el registro",
   disclaimer:
     "Esto te indica lugares donde chequearte — no es atención médica ni un diagnóstico. En una emergencia, llama al 911.",
+  events: {
+    title: "Chequeos y eventos cerca de ti",
+    intro:
+      "Chequeos de salud del corazón gratis en el vecindario. Agregamos eventos aquí a medida que se confirman.",
+    empty:
+      "No hay eventos publicados ahora. Visita los lugares de arriba cuando quieras — y vuelve aquí cuando se agreguen días de chequeo locales.",
+    when: "Cuándo",
+    where: "Dónde",
+    offered: "Qué ofrecen",
+    cost: "Costo",
+    planned: "Planeado",
+  },
 };
 
 const ht: GsContent = {
@@ -172,6 +207,18 @@ const ht: GsContent = {
   trackButton: "Louvri zouti swivi a",
   disclaimer:
     "Sa a montre ou kote pou fè tcheke — se pa swen medikal ni yon dyagnostik. Nan yon ijans, rele 911.",
+  events: {
+    title: "Tcheke ak evènman toupre ou",
+    intro:
+      "Tcheke sante kè gratis k ap fèt nan katye a. Nou ajoute evènman isit la lè yo konfime yo.",
+    empty:
+      "Pa gen evènman pou kounye a. Ale nan kote ki anlè yo nenpòt lè — epi tounen isit la lè jou tcheke lokal yo ajoute.",
+    when: "Kilè",
+    where: "Kote",
+    offered: "Sa yo ofri",
+    cost: "Pri",
+    planned: "Planifye",
+  },
 };
 
 export const GET_SCREENED: Record<Locale, GsContent> = { en, es, ht };
