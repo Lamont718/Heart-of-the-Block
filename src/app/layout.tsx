@@ -7,6 +7,27 @@ import { FirstRunModal } from "@/components/first-run-modal";
 import { LanguageProvider } from "@/i18n/provider";
 import { LanguageNotice } from "@/components/language-notice";
 import { getUser } from "@/lib/supabase/auth";
+import { JsonLd } from "@/components/json-ld";
+
+const SITE_URL = "https://heartoftheblock.org";
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Heart of the Block",
+  url: SITE_URL,
+  description:
+    "A Brooklyn heart-health platform. Understand your numbers, make real food swaps, scan products, and find healthy places to shop near you.",
+  areaServed: { "@type": "Place", name: "Brooklyn, New York" },
+};
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Heart of the Block",
+  url: SITE_URL,
+  inLanguage: ["en", "es", "ht"],
+};
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -38,12 +59,22 @@ export const metadata: Metadata = {
     "blood pressure",
     "cholesterol",
   ],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Heart of the Block",
     description:
       "Brooklyn heart health, the way you live. Real tools, real food, real places near you.",
     type: "website",
     siteName: "Heart of the Block",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Heart of the Block",
+    description:
+      "Brooklyn heart health, the way you live. Real tools, real food, real places near you.",
   },
   appleWebApp: {
     capable: true,
@@ -67,6 +98,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
+        <JsonLd data={orgSchema} />
+        <JsonLd data={siteSchema} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brick focus:px-4 focus:py-2 focus:text-white"

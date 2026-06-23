@@ -92,7 +92,7 @@ body {
 
   /* Form fields */
   .field {
-    @apply min-h-[48px] w-full rounded-xl border border-line bg-surface px-4 text-base text-ink placeholder:text-muted focus:border-brick;
+    @apply min-h-[48px] w-full rounded-xl border border-line bg-surface px-4 text-base text-ink placeholder:text-muted focus:border-brick focus:outline-none focus:ring-2 focus:ring-brick/40;
   }
   .label {
     @apply mb-1.5 block text-sm font-semibold text-ink;

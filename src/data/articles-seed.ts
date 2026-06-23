@@ -301,4 +301,93 @@ You deserve a provider who gives you their time and takes you seriously. Keep as
 *This is encouragement and education, not medical advice. If something feels seriously wrong, don't wait — in an emergency call 911.*
 `,
   ),
+  a(
+    "art-sleep-stress",
+    "Sleep, stress, and your heart",
+    "sleep-stress-and-your-heart",
+    "Rest isn't a luxury. Bad sleep and steady stress wear on your heart just like salt and sugar do.",
+    ["stress", "heart-basics", "blood-pressure"],
+    `
+We talk a lot about what you eat. But how you *rest* matters to your heart too — and in Brooklyn, where the rent's high, the trains are late, and somebody always needs something, rest is the first thing that gets cut.
+
+Here's the honest version: chronic stress and short sleep both raise your blood pressure and make your heart work harder, day after day. You can't always change what's stressing you. But you can give your heart a few breaks.
+
+**On sleep:**
+
+- **Aim for a steady bedtime.** Going to bed and waking around the same time matters more than the exact hours. Your heart likes a rhythm.
+- **Watch the loud snoring.** If you snore hard and wake up tired no matter how long you slept, ask your doctor about sleep apnea — it's common and it's hard on the heart, and it's treatable.
+- **Wind the screen down.** The phone keeps your brain switched on. Give yourself 30 minutes before bed without it.
+
+**On stress:**
+
+- **Move it out.** A walk around the block does more for stress than scrolling. Ten minutes counts.
+- **Breathe slow, on purpose.** Four counts in, six counts out, for a minute. It's free, it works, and nobody has to know you're doing it.
+- **Protect one thing that's yours.** Church, the garden, dominoes, a phone call with somebody who makes you laugh. The thing that refills you isn't optional — it's maintenance.
+- **Don't carry it silent.** Talking to someone — a friend, a pastor, a counselor — takes weight off your heart in a real, physical way.
+
+You don't have to fix your whole life. Pick one — sleep or stress — and give it a little room this week.
+
+*This is general wellness guidance, not medical advice. If stress or sleep is wearing you down, your doctor can help — and in an emergency, call 911.*
+`,
+  ),
+  a(
+    "art-medicines",
+    "Your heart medicines, explained simply",
+    "heart-medicines-explained",
+    "If your doctor put you on a pill for blood pressure or cholesterol, here's what it's actually doing — in plain words.",
+    ["medication", "blood-pressure", "cholesterol"],
+    `
+A lot of people take a pill for their pressure or their cholesterol and never really get told what it does. So here's the plain-language version. This won't replace your doctor — but it'll help you understand what you're taking and ask better questions.
+
+**Blood pressure pills.** There are a few kinds, and your doctor picks based on you:
+
+- Some (like *water pills* / diuretics) help your body let go of extra salt and fluid, so there's less to push around.
+- Some (like *ACE inhibitors* or *ARBs*) relax your blood vessels so blood flows easier. A dry cough can be a side effect of one type — tell your doctor, there's usually a swap.
+- Some (like *beta blockers*) ease the load on your heart so it doesn't have to work so hard.
+
+**Cholesterol pills.** *Statins* are the common one. They lower the kind of cholesterol that clogs arteries. Some people get sore muscles — if that's you, don't just stop, call your doctor, because the protection statins give your heart is real.
+
+**The part people get wrong:**
+
+- **These work even when you feel fine.** High pressure and high cholesterol usually have no symptoms. Feeling good doesn't mean you can stop — stopping is when trouble comes back.
+- **Take it at the same time daily.** Tie it to something you already do — morning coffee, brushing your teeth. A weekly pill box helps.
+- **Tell your doctor about side effects instead of quitting.** Almost always there's another option. Quitting quietly is the risky move.
+- **Lifestyle and medicine work together.** The walking and the food swaps don't make the pill pointless — they often let your doctor keep your dose low.
+
+Bring your pill bottles (or a photo of them) to every visit so your doctor sees the whole picture.
+
+*This explains common medicines in general terms — it is not medical advice and not a prescription. Never start, stop, or change a medicine without your doctor. In an emergency, call 911.*
+`,
+  ),
+  a(
+    "art-doctor-visit",
+    "Make your doctor visit count",
+    "make-your-doctor-visit-count",
+    "Fifteen minutes goes fast. Walk in ready and you'll walk out with answers instead of a blur.",
+    ["advocacy", "heart-basics"],
+    `
+Doctor visits are short, and it's easy to leave realizing you forgot half of what you meant to say. A little prep changes that. Here's how to make the time work for you.
+
+**Bring your numbers.** If you track your blood pressure, A1C, weight, or cholesterol, bring the trend — not just today's number. (The tracker on this site is built for exactly this; pull it up on your phone.) Your doctor learns far more from "here's the last three months" than from one reading in a cold exam room.
+
+**Write your top 3 questions down — before you go.** When you're nervous you forget. A note on your phone means you won't. Put the thing you're most worried about *first*, in case time runs out.
+
+**Good questions to ask:**
+
+- "What's my biggest risk right now, and what's the one thing that would help most?"
+- "What should these numbers be for me — and are mine okay?"
+- "What happens if we wait versus act now?"
+- "Is there a cheaper version of this medicine or test?"
+
+**Know how to read the printout.** When you get your results, look for the *range* next to each number — that's where you're supposed to land. If your number's outside it, ask what it means and what to do. Don't let a sheet of numbers go home unexplained.
+
+**Bring a second set of ears if you can.** A family member or friend hears things you miss when you're worried, and can help you remember later.
+
+**Before you leave, repeat the plan back.** "So I'm taking this once a day, cutting back on salt, and coming back in three months — that right?" That one sentence catches misunderstandings on the spot.
+
+You're not a bother for taking up the time. You came for answers — leave with them.
+
+*This is general guidance to help you prepare, not medical advice. Your care team knows your situation best. In an emergency, call 911.*
+`,
+  ),
 ];

@@ -8,6 +8,7 @@ import { ReadAloud } from "@/components/articles/read-aloud";
 import { ArticleCard } from "@/components/articles/article-card";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { RECIPES } from "@/data/recipes-seed";
+import { JsonLd } from "@/components/json-ld";
 
 export const revalidate = 3600;
 
@@ -23,7 +24,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const article = await getArticleBySlug(params.slug);
   if (!article) return { title: "Article not found" };
-  return { title: article.title, description: article.excerpt };
+  return {
+    title: article.title,
+    description: article.excerpt,
+    alternates: { canonical: `/learn/${article.slug}` },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+    },
+  };
 }
 
 export default async function ArticlePage({
@@ -49,8 +64,24 @@ export default async function ArticlePage({
     )
     .slice(0, 3);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.excerpt,
+    inLanguage: "en",
+    author: { "@type": "Organization", name: "Heart of the Block" },
+    publisher: {
+      "@type": "Organization",
+      name: "Heart of the Block",
+      url: "https://heartoftheblock.org",
+    },
+    mainEntityOfPage: `https://heartoftheblock.org/learn/${article.slug}`,
+  };
+
   return (
     <article className="container-block max-w-2xl py-8 sm:py-10">
+      <JsonLd data={articleSchema} />
       <Link
         href="/learn"
         className="text-sm font-semibold text-brick-700 hover:underline"

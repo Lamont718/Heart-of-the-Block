@@ -24,6 +24,8 @@ export type TopicTag =
   | "fats"
   | "cooking"
   | "movement"
+  | "stress"
+  | "medication"
   | "caribbean"
   | "soul-food"
   | "advocacy";
@@ -38,6 +40,8 @@ export const TOPIC_META: Record<TopicTag, { label: string; emoji: string }> = {
   fats: { label: "Fats", emoji: "🥑" },
   cooking: { label: "Cooking", emoji: "🍳" },
   movement: { label: "Moving more", emoji: "👟" },
+  stress: { label: "Stress & sleep", emoji: "😮‍💨" },
+  medication: { label: "Medicines", emoji: "💊" },
   caribbean: { label: "Caribbean", emoji: "🌴" },
   "soul-food": { label: "Soul food", emoji: "🍗" },
   advocacy: { label: "Speak up", emoji: "🗣️" },

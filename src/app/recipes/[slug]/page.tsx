@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { RECIPES, getRecipe } from "@/data/recipes-seed";
 import { getLocale } from "@/i18n/server";
 import { RECIPES_CHROME, RECIPES_TR } from "@/i18n/content/recipes";
+import { JsonLd } from "@/components/json-ld";
 
 export function generateStaticParams() {
   return RECIPES.map((r) => ({ slug: r.slug }));
@@ -20,6 +21,19 @@ export async function generateMetadata({
   return {
     title: `${recipe.title} | Heart of the Block`,
     description: recipe.blurb,
+    alternates: { canonical: `/recipes/${recipe.slug}` },
+    openGraph: {
+      title: recipe.title,
+      description: recipe.blurb,
+      type: "article",
+      images: [{ url: recipe.image }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: recipe.title,
+      description: recipe.blurb,
+      images: [recipe.image],
+    },
   };
 }
 
@@ -39,8 +53,27 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
   const swaps = t?.swaps ?? recipe.swaps;
   const why = t?.why ?? recipe.why;
 
+  const recipeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: title,
+    description: blurb,
+    image: [`https://heartoftheblock.org${recipe.image}`],
+    recipeYield: `${recipe.servings} servings`,
+    totalTime: `PT${recipe.minutes}M`,
+    keywords: tags.join(", "),
+    recipeIngredient: ingredients,
+    recipeInstructions: steps.map((step, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      text: step,
+    })),
+    author: { "@type": "Organization", name: "Heart of the Block" },
+  };
+
   return (
     <div className="py-10 sm:py-14">
+      <JsonLd data={recipeSchema} />
       <div className="container-block max-w-3xl">
         <Link
           href="/recipes"
