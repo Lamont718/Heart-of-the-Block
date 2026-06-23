@@ -24,12 +24,20 @@ Likely spots to double-check:
 - "Heart-risk check" → ES `Chequeo de riesgo cardíaco` / HT `Tcheke risk kè`
 - The footer tagline in both languages.
 
-## What is NOT translated (on purpose)
-**Health content stays in English** until a native speaker reviews it — we do not
-machine-translate medical content on a trust-based platform. That includes:
-- Learn articles, Recipes, the ABCs page + ranges, guided Plans
+## Now translated as content (pending HT native review)
+- **The ABCs of Life page** (`/abcs`) — fully translated (ES solid, HT first pass).
+  Content lives in `src/i18n/content/abcs.ts`; the page renders the locale's text
+  server-side from the `hotb_locale` cookie. This is the model for translating the
+  rest: a per-locale content file + `getLocale()` in the page.
+
+## What is NOT translated yet (on purpose)
+**The rest of the health content stays in English** until a native speaker reviews
+it — we do not machine-translate medical content on a trust-based platform. Still
+English (next batches, lower-risk first):
+- Money-for-Produce / Healthy Buys / Directory body copy (practical, low-risk — good next)
+- Recipes (ingredients/steps)
+- Learn articles (long-form prose — do last, with the most review)
 - The medical-safety disclaimers (SPEC §6)
-- Directory / Healthy Buys / Money-for-Produce body copy
 
 When a non-English language is selected, a banner tells visitors some pages are
 still in English (the `notice` string, already translated).
