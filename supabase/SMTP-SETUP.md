@@ -42,24 +42,39 @@ Supabase dashboard → **Project Settings → Authentication → SMTP Settings**
 
 Save. (The sender email's domain **must** be the verified Resend domain.)
 
-## 4. Use the branded email template
+## 4. Use the branded email template  ← FIXES "verification not working"
 
 Supabase → **Authentication → Email Templates → "Confirm signup"**.
 Replace the body with the contents of
 `supabase/email-templates/confirm-signup.html` (in this repo).
-Keep the `{{ .ConfirmationURL }}` variable exactly as-is.
+
+> **Why this is the real fix.** The template now links to
+> `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup`
+> instead of the plain `{{ .ConfirmationURL }}`. The default
+> `{{ .ConfirmationURL }}` returns the session in the URL *hash*, which our
+> server-side (`@supabase/ssr`) app can't read — so after clicking "Confirm,"
+> the user lands back looking **unverified / not signed in**. The token_hash
+> link routes through our `/auth/confirm` route, which verifies the OTP and
+> sets the session **cookie** the server actually reads. **You must re-paste
+> this template for confirmation to work.**
 
 You can do the same for the other templates (Magic Link, Reset Password)
-later if you want them branded too.
+later if you want them branded too — point them at `/auth/confirm` with the
+matching `type` (`magiclink`, `recovery`).
 
-## 5. Confirm redirect URLs are set
+## 5. Confirm redirect URLs are set  ← also required
 
 Supabase → **Authentication → URL Configuration**:
-- **Site URL:** `https://heartoftheblock.org`
+- **Site URL:** `https://heartoftheblock.org`  (the `{{ .SiteURL }}` in the
+  template — if this is wrong, the confirm link points to the wrong host).
 - **Redirect URLs:** include `https://heartoftheblock.org/**` (and
   `http://localhost:3000/**` for local testing).
 
 This is what makes the confirm link land on `/auth/confirm` correctly.
+
+> The `/auth/confirm` route also accepts a `?code=` (PKCE) link, so if you ever
+> switch flows it still works — but the token_hash template above is the
+> supported path.
 
 ## 6. Test
 
