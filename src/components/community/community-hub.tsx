@@ -21,6 +21,7 @@ import {
 } from "@/lib/community/data";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { CrossToolNudges } from "./cross-tool-nudges";
+import { Leaderboard } from "./leaderboard";
 
 const ACTIVITY_LABEL: Record<ActivityType, string> = {
   walk: "Walk",
@@ -28,7 +29,17 @@ const ACTIVITY_LABEL: Record<ActivityType, string> = {
   other: "Other",
 };
 
-export function CommunityHub({ signedIn }: { signedIn: boolean }) {
+export function CommunityHub({
+  signedIn,
+  userId = null,
+  displayName = "",
+  neighborhood = "",
+}: {
+  signedIn: boolean;
+  userId?: string | null;
+  displayName?: string;
+  neighborhood?: string;
+}) {
   const remote = signedIn && isSupabaseConfigured;
   const [mounted, setMounted] = useState(false);
   const [checkIns, setCheckIns] = useState<string[]>([]);
@@ -230,6 +241,21 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
         </div>
       </section>
 
+      {/* Neighbor leaderboard */}
+      <section>
+        <h2 className="mb-3 font-display text-xl font-extrabold text-ink">
+          Your neighbors
+        </h2>
+        <Leaderboard
+          remote={remote}
+          userId={userId}
+          points={mounted ? points : 0}
+          currentStreak={mounted ? streak.current : 0}
+          displayName={displayName}
+          neighborhood={neighborhood}
+        />
+      </section>
+
       {/* Cross-tool nudges */}
       <section>
         <h2 className="mb-3 font-display text-xl font-extrabold text-ink">
@@ -244,9 +270,8 @@ export function CommunityHub({ signedIn }: { signedIn: boolean }) {
         ) : (
           <>
             🔒 Your streak, points, and challenges are saved{" "}
-            <strong>on this device</strong>. When accounts go live you’ll keep
-            them across devices — and join challenges with neighbors on a real
-            leaderboard.
+            <strong>on this device</strong>. Sign in to keep them across devices
+            — and join the opt-in block leaderboard with your neighbors.
           </>
         )}
       </p>

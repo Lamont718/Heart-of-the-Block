@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getUser } from "@/lib/supabase/auth";
+import { createClient } from "@/lib/supabase/server";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { CommunityHub } from "@/components/community/community-hub";
 
 export const metadata: Metadata = {
@@ -10,6 +12,20 @@ export const metadata: Metadata = {
 
 export default async function CommunityPage() {
   const user = await getUser();
+
+  // Name + neighborhood feed the leaderboard's display (chosen, non-health).
+  let displayName = "";
+  let neighborhood = "";
+  if (user && isSupabaseConfigured) {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("profiles")
+      .select("display_name, neighborhood")
+      .eq("id", user.id)
+      .single();
+    displayName = data?.display_name ?? "";
+    neighborhood = data?.neighborhood ?? "";
+  }
 
   return (
     <div className="container-block py-8 sm:py-10">
@@ -27,7 +43,12 @@ export default async function CommunityPage() {
       </header>
 
       <div className="mt-6">
-        <CommunityHub signedIn={!!user} />
+        <CommunityHub
+          signedIn={!!user}
+          userId={user?.id ?? null}
+          displayName={displayName}
+          neighborhood={neighborhood}
+        />
       </div>
     </div>
   );
