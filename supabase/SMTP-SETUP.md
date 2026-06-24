@@ -1,8 +1,19 @@
 # Branded auth emails (custom SMTP via Resend)
 
-Goal: keep email confirmation on, but have the email come from
-**heartoftheblock.org** (branded) instead of Supabase's generic server.
-This also stops confirmation emails from landing in spam.
+> **CURRENT STATE (2026-06-24): email confirmation is DISABLED.**
+> Signups are active immediately — no confirmation email, no link to click.
+> This was a deliberate decision: (1) Supabase locks email-template editing
+> behind custom SMTP, so the default `{{ .ConfirmationURL }}` link can't be
+> swapped for our token_hash link, and that default link is incompatible with
+> our server-side `/auth/confirm` route ("That link didn't work"); (2) for a
+> neighborhood audience, a "check your email and click a link" step is friction
+> that loses people. Turn it back on (Authentication → Sign In / Providers →
+> Email → "Confirm email") only AFTER completing the Resend SMTP setup below,
+> which unlocks the branded token_hash template.
+
+Goal (optional, later): branded confirmation/reset emails from
+**heartoftheblock.org** instead of Supabase's generic server, which also lets
+us edit the templates and stops mail landing in spam.
 
 You already use Resend (for YODM), so we reuse it.
 
