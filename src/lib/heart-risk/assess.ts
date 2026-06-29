@@ -181,11 +181,20 @@ function smoking(input: HeartRiskInput): FactorResult {
         "Quitting is the single biggest thing you can do for your heart. You don't have to do it alone — free help in NY: call 866-NY-QUITS.",
     };
   }
+  if (input.smokes === "no") {
+    return {
+      ...base,
+      level: "good",
+      headline: "No",
+      message: "Smoke-free is one of the best gifts you give your heart.",
+    };
+  }
   return {
     ...base,
-    level: "good",
-    headline: "No",
-    message: "Smoke-free is one of the best gifts you give your heart.",
+    level: "unknown",
+    headline: "Not answered",
+    message:
+      "You didn't answer this one. If you smoke or vape, quitting is the single biggest thing you can do for your heart — free help in NY: 866-NY-QUITS.",
   };
 }
 
@@ -200,11 +209,20 @@ function activity(input: HeartRiskInput): FactorResult {
         "Moving most days protects your heart — even a daily walk counts. The Guided Plans have easy, seated-friendly options.",
     };
   }
+  if (input.active === "yes") {
+    return {
+      ...base,
+      level: "good",
+      headline: "Most days",
+      message: "Keep it going — your heart loves the routine.",
+    };
+  }
   return {
     ...base,
-    level: "good",
-    headline: "Most days",
-    message: "Keep it going — your heart loves the routine.",
+    level: "unknown",
+    headline: "Not answered",
+    message:
+      "You didn't answer this one. Moving most days protects your heart — even a daily walk counts. The Guided Plans have easy, seated-friendly options.",
   };
 }
 
@@ -228,11 +246,20 @@ function family(input: HeartRiskInput): FactorResult {
         "Worth asking your relatives. Knowing your family's history helps your doctor look out for you.",
     };
   }
+  if (input.familyHistory === "no") {
+    return {
+      ...base,
+      level: "good",
+      headline: "No",
+      message: "Good to know — one less thing to worry about.",
+    };
+  }
   return {
     ...base,
-    level: "good",
-    headline: "No",
-    message: "Good to know — one less thing to worry about.",
+    level: "unknown",
+    headline: "Not answered",
+    message:
+      "You didn't answer this one. Knowing whether heart disease or stroke runs in your family helps your doctor look out for you.",
   };
 }
 

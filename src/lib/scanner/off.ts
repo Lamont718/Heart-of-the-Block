@@ -10,6 +10,7 @@ const FIELDS = [
   "brands",
   "image_front_small_url",
   "serving_size",
+  "categories",
   "nutriments",
 ].join(",");
 

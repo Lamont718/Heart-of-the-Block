@@ -25,14 +25,23 @@ function readCookieLocale(): Locale {
   return isLocale(m?.[1]) ? (m![1] as Locale) : DEFAULT_LOCALE;
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Start at the default so the server HTML and first client render match (no
-  // hydration mismatch), then adopt the saved locale right after mount.
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+export function LanguageProvider({
+  children,
+  initialLocale = DEFAULT_LOCALE,
+}: {
+  children: React.ReactNode;
+  initialLocale?: Locale;
+}) {
+  // The server reads the locale cookie and passes it in, so the server HTML and
+  // the first client render agree (no hydration mismatch) AND there's no
+  // flash-of-English. We still re-check the cookie after mount as a safety net.
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
     const saved = readCookieLocale();
-    if (saved !== DEFAULT_LOCALE) setLocaleState(saved);
+    if (saved !== locale) setLocaleState(saved);
+    // Run once on mount to reconcile with the actual cookie.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

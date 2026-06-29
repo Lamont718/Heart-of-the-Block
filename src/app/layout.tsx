@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -8,6 +9,7 @@ import { LanguageProvider } from "@/i18n/provider";
 import { LanguageNotice } from "@/components/language-notice";
 import { getUser } from "@/lib/supabase/auth";
 import { JsonLd } from "@/components/json-ld";
+import { DEFAULT_LOCALE, LOCALE_COOKIE, isLocale } from "@/i18n/config";
 
 const SITE_URL = "https://heartoftheblock.org";
 
@@ -95,8 +97,14 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const user = await getUser();
 
+  // Read the saved locale on the server so the very first HTML carries the
+  // right `lang` (screen-reader pronunciation) and renders in the saved
+  // language with no flash-of-English. The provider keeps it in sync after.
+  const cookieLocale = cookies().get(LOCALE_COOKIE)?.value;
+  const locale = isLocale(cookieLocale) ? cookieLocale : DEFAULT_LOCALE;
+
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang={locale} className={`${display.variable} ${sans.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
         <JsonLd data={orgSchema} />
         <JsonLd data={siteSchema} />
@@ -106,7 +114,7 @@ export default async function RootLayout({
         >
           Skip to content
         </a>
-        <LanguageProvider>
+        <LanguageProvider initialLocale={locale}>
           <SiteHeader user={user} />
           <LanguageNotice />
           <main id="main" className="flex-1">
