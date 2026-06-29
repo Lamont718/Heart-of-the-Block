@@ -29,7 +29,7 @@ export function ProfileForm({
   return (
     <form action={formAction} className="mt-4 space-y-4">
       <div>
-        <label className="label">Email</label>
+        <p className="label">Email</p>
         <p className="text-sm font-semibold text-muted">{email}</p>
       </div>
 

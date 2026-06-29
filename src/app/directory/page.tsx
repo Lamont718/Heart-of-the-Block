@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getListings } from "@/lib/directory/listings";
 import { DirectoryExplorer } from "@/components/directory/directory-explorer";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Where to shop — healthy spots in Brooklyn",
   description:
     "A map and list of genuinely healthy places to shop in Brooklyn — markets, grocers, and farmers markets with real fresh produce. Filter by open now, distance, and category.",
-};
+  path: "/directory",
+});
 
 // Listings change rarely; revalidate hourly so DB edits show without a redeploy.
 export const revalidate = 3600;

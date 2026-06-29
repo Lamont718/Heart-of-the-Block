@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getLocale } from "@/i18n/server";
 import { GET_SCREENED } from "@/i18n/content/get-screened";
@@ -15,11 +15,12 @@ function formatEventDate(iso: string, locale: keyof typeof LOCALE_TAG): string {
   });
 }
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Where to check your numbers | Heart of the Block",
   description:
     "Free and low-cost places around NYC to check your blood pressure, blood sugar, and cholesterol — pharmacies, NYC Care, community health centers, and screening fairs.",
-};
+  path: "/get-screened",
+});
 
 export default function GetScreenedPage() {
   const locale = getLocale();

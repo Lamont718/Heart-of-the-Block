@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Medical disclaimer",
   description:
     "Heart of the Block provides education, not medical advice or diagnosis.",
-};
+  path: "/disclaimer",
+});
 
 export default function DisclaimerPage() {
   return (

@@ -19,7 +19,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const plan = await getPlanBySlug(params.slug);
   if (!plan) return { title: "Plan not found" };
-  return { title: plan.title, description: plan.description };
+  return {
+    title: plan.title,
+    description: plan.description,
+    alternates: { canonical: `/plans/${plan.slug}` },
+    openGraph: {
+      title: plan.title,
+      description: plan.description,
+      url: `/plans/${plan.slug}`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: plan.title,
+      description: plan.description,
+    },
+  };
 }
 
 export default async function PlanPage({

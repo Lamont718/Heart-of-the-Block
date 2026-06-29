@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -7,9 +7,10 @@ import { getUser } from "@/lib/supabase/auth";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 import { ProfileForm } from "./profile-form";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "My account",
-};
+  path: "/account",
+});
 
 export default async function AccountPage() {
   const user = await getUser();

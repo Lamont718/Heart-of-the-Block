@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { Scanner } from "@/components/scanner/scanner";
 import { getUser } from "@/lib/supabase/auth";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Barcode Scanner — a heart read, right in the aisle",
   description:
     "Scan a product's barcode and get an instant, plain-language heart-health read — then a better swap. Powered by Open Food Facts.",
-};
+  path: "/scan",
+});
 
 export default async function ScanPage() {
   const user = await getUser();

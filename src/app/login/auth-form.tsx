@@ -24,6 +24,10 @@ export function AuthForm({
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const action = mode === "signup" ? signUp : signIn;
   const [state, formAction] = useFormState<AuthState, FormData>(action, null);
+  // Email is controlled so switching tabs (which remounts the form to reset the
+  // action + clear stale errors) doesn't wipe what the person already typed.
+  const [email, setEmail] = useState("");
+  const [showPw, setShowPw] = useState(false);
 
   return (
     <div className="card">
@@ -35,6 +39,7 @@ export function AuthForm({
         {(["signin", "signup"] as const).map((m) => (
           <button
             key={m}
+            type="button"
             role="tab"
             aria-selected={mode === m}
             onClick={() => setMode(m)}
@@ -78,6 +83,8 @@ export function AuthForm({
             type="email"
             required
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="field"
             placeholder="you@email.com"
           />
@@ -87,16 +94,26 @@ export function AuthForm({
           <label htmlFor="password" className="label">
             Password
           </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={mode === "signup" ? 8 : undefined}
-            autoComplete={mode === "signup" ? "new-password" : "current-password"}
-            className="field"
-            placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
-          />
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPw ? "text" : "password"}
+              required
+              minLength={mode === "signup" ? 8 : undefined}
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              className="field pr-16"
+              placeholder={mode === "signup" ? "At least 8 characters" : "Your password"}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPw((v) => !v)}
+              aria-pressed={showPw}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-sm font-semibold text-brick-700 hover:underline"
+            >
+              {showPw ? "Hide" : "Show"}
+            </button>
+          </div>
         </div>
 
         {state?.error && (
@@ -118,6 +135,7 @@ export function AuthForm({
           <>
             New here?{" "}
             <button
+              type="button"
               onClick={() => setMode("signup")}
               className="font-semibold text-brick-700 hover:underline"
             >
@@ -128,6 +146,7 @@ export function AuthForm({
           <>
             Already have an account?{" "}
             <button
+              type="button"
               onClick={() => setMode("signin")}
               className="font-semibold text-brick-700 hover:underline"
             >

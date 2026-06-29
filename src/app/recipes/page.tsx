@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { RECIPES } from "@/data/recipes-seed";
 import { getLocale } from "@/i18n/server";
 import { RECIPES_CHROME, RECIPES_TR } from "@/i18n/content/recipes";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Heart-smart recipes | Heart of the Block",
   description:
     "The food Brooklyn actually cooks — oxtail, fried chicken, rice and peas — made a little kinder to your heart. Real recipes with the swaps built in.",
-};
+  path: "/recipes",
+});
 
 export default function RecipesPage() {
   const locale = getLocale();

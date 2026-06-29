@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getUser } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { CommunityHub } from "@/components/community/community-hub";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Your block — check in, keep your streak, take on a challenge",
   description:
     "The part that makes it stick: daily check-ins, streaks, small challenges, and your progress from across the app, all in one place.",
-};
+  path: "/community",
+});
 
 export default async function CommunityPage() {
   const user = await getUser();

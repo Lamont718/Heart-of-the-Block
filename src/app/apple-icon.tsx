@@ -2,6 +2,8 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
+// Rendered on first request, not at build: @vercel/og resolves its bundled font
+// via a file URL that isn't available during static prerender (then CDN-cached).
 export const dynamic = "force-dynamic";
 
 /** Apple touch icon for "Add to Home Screen". */

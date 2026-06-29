@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { STORES, PRICES_LAST_CHECKED } from "@/data/store-staples-seed";
 import { getLocale } from "@/i18n/server";
 import { HB_CHROME, HB_STORES } from "@/i18n/content/healthy-buys";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Healthy staples & what they cost | Heart of the Block",
   description:
     "What to grab at the stores around Brooklyn — BJ's, Aldi, ShopRite, Key Food, C-Town, Trader Joe's — and roughly what the heart-smart basics cost.",
-};
+  path: "/healthy-buys",
+});
 
 export default function HealthyBuysPage() {
   const locale = getLocale();

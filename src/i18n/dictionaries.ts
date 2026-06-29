@@ -25,6 +25,8 @@ export type Dict = {
     toolsTitle: string;
     exploreTitle: string;
     aboutTitle: string;
+    about: string;
+    contact: string;
     swaps: string;
     scanner: string;
     tracker: string;
@@ -64,6 +66,8 @@ const en: Dict = {
     toolsTitle: "The tools",
     exploreTitle: "Explore",
     aboutTitle: "About",
+    about: "About us",
+    contact: "Contact",
     swaps: "Food Swap Finder",
     scanner: "Barcode Scanner",
     tracker: "Numbers Tracker",
@@ -105,6 +109,8 @@ const es: Dict = {
     toolsTitle: "Las herramientas",
     exploreTitle: "Explora",
     aboutTitle: "Acerca de",
+    about: "Acerca de nosotros",
+    contact: "Contacto",
     swaps: "Buscador de sustituciones",
     scanner: "Escáner de código de barras",
     tracker: "Registro de números",
@@ -146,6 +152,8 @@ const ht: Dict = {
     toolsTitle: "Zouti yo",
     exploreTitle: "Eksplore",
     aboutTitle: "Konsènan",
+    about: "Konsènan nou",
+    contact: "Kontakte nou",
     swaps: "Jwenn ranplasman manje",
     scanner: "Eskanè kòd ba",
     tracker: "Swiv nimewo ou yo",

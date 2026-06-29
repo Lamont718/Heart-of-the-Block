@@ -3,7 +3,9 @@ import { ImageResponse } from "next/og";
 export const alt = "Heart of the Block — Brooklyn heart health, the way you live";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-// Render on first request rather than at build (keeps offline builds clean).
+// Rendered on first request, not at build: @vercel/og resolves its bundled font
+// via a file URL that isn't available during static prerender. Responses are
+// cached by the CDN and social scrapers, so the per-request cost is negligible.
 export const dynamic = "force-dynamic";
 
 /** Share/social card shown when the site (or a swap) is shared. */

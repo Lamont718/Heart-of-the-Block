@@ -73,7 +73,13 @@ export async function signUp(
   });
 
   if (error) {
-    return { error: "We couldn’t create that account. " + error.message };
+    // Don't surface the raw Supabase message (account-enumeration / info leak).
+    // Log it server-side for debugging; show the person a friendly line.
+    console.error("[signUp]", error.message);
+    const friendly = /registered|already/i.test(error.message)
+      ? "That email already has an account. Try signing in instead."
+      : "We couldn’t create that account. Double-check your email and try again.";
+    return { error: friendly };
   }
 
   return {

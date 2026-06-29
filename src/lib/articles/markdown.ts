@@ -1,13 +1,21 @@
 import { marked } from "marked";
+import DOMPurify from "isomorphic-dompurify";
 
 marked.setOptions({ gfm: true, breaks: false });
 
 /**
- * Render trusted, first-party markdown to an HTML string (server-side only).
- * Content is authored by us, so no user-input sanitization is needed.
+ * Render markdown to a SANITIZED HTML string (server-side only).
+ *
+ * Article bodies are first-party but loaded from the Supabase `articles` table,
+ * so we treat them as untrusted at render time: a malicious or compromised row
+ * must never become stored XSS when injected via dangerouslySetInnerHTML.
  */
 export function renderMarkdown(md: string): string {
-  return marked.parse(md) as string;
+  const html = marked.parse(md) as string;
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+    ADD_ATTR: ["target", "rel"],
+  });
 }
 
 /** Plain text for the read-aloud feature and reading-time math. */

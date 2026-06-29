@@ -1,15 +1,24 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getUser } from "@/lib/supabase/auth";
 import { TrackerApp } from "@/components/tracker/tracker-app";
+import { METRIC_META, type Metric } from "@/lib/tracker/types";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Numbers Tracker — your heart numbers over time",
   description:
     "Log your weight, blood pressure, and cholesterol and see simple trends over time. Private, low-burden, and always pointed back to your doctor.",
-};
+  path: "/tracker",
+});
 
-export default async function TrackerPage() {
+export default async function TrackerPage({
+  searchParams,
+}: {
+  searchParams: { metric?: string };
+}) {
   const user = await getUser();
+  const requested = searchParams.metric;
+  const initialMetric: Metric | undefined =
+    requested && requested in METRIC_META ? (requested as Metric) : undefined;
 
   return (
     <div className="container-block py-8 sm:py-10">
@@ -28,7 +37,7 @@ export default async function TrackerPage() {
       </header>
 
       <div className="mt-6">
-        <TrackerApp signedIn={!!user} />
+        <TrackerApp signedIn={!!user} initialMetric={initialMetric} />
       </div>
     </div>
   );

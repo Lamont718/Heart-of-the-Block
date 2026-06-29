@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getLocale } from "@/i18n/server";
 import { ABC_CONTENT } from "@/i18n/content/abcs";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "The ABCs of Life | Heart of the Block",
   description:
     "Three numbers worth knowing for your heart — A1C (blood sugar), Blood pressure, and Cholesterol. Plain-language guideposts, and where to track yours.",
-};
+  path: "/abcs",
+});
 
 const TONE: Record<"good" | "okay" | "limit", string> = {
   good: "bg-teal-100 text-teal",

@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getSwaps } from "@/lib/swaps/swaps";
 import { getUser } from "@/lib/supabase/auth";
 import { SwapFinder } from "@/components/swaps/swap-finder";
 import { DisclaimerBanner } from "@/components/disclaimer-banner";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Food Swap Finder — your favorites, made to love you back",
   description:
     "Tell us what you eat and get realistic, culturally-rooted food swaps with the why — Caribbean, soul food, and everyday staples done heart-smart.",
-};
+  path: "/swaps",
+});
 
 export default async function SwapsPage() {
   const [swaps, user] = await Promise.all([getSwaps(), getUser()]);

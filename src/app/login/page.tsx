@@ -16,8 +16,11 @@ export default async function LoginPage({
   searchParams: { mode?: string; next?: string };
 }) {
   const user = await getUser();
+  // Only allow same-site relative paths — block protocol-relative ("//evil.com").
   const next =
-    searchParams.next && searchParams.next.startsWith("/")
+    searchParams.next &&
+    searchParams.next.startsWith("/") &&
+    !searchParams.next.startsWith("//")
       ? searchParams.next
       : "/account";
 

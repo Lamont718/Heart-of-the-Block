@@ -160,8 +160,7 @@ export function Leaderboard({
 
       {error && (
         <p className="mt-3 rounded-xl bg-brick-100 px-4 py-3 text-sm font-medium text-brick-700">
-          Couldn’t load the leaderboard just now. (If you’re the admin, make sure
-          the leaderboard table migration has been run.)
+          Couldn’t load the leaderboard just now — please try again in a moment.
         </p>
       )}
 

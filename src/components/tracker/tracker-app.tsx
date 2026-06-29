@@ -30,11 +30,17 @@ const fmtDate = (iso: string) => {
   });
 };
 
-export function TrackerApp({ signedIn }: { signedIn: boolean }) {
+export function TrackerApp({
+  signedIn,
+  initialMetric = "a1c",
+}: {
+  signedIn: boolean;
+  initialMetric?: Metric;
+}) {
   // Synced to the account when signed in (and Supabase is wired up); otherwise
   // local-first on this device.
   const remote = signedIn && isSupabaseConfigured;
-  const [metric, setMetric] = useState<Metric>("a1c");
+  const [metric, setMetric] = useState<Metric>(initialMetric);
   const [loading, setLoading] = useState(true);
   const [readings, setReadings] = useState<Reading[]>([]);
   const [goal, setGoal] = useState<WeightGoal | null>(null);

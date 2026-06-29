@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getPlans } from "@/lib/plans/plans";
 import { PlanCard } from "@/components/plans/plan-card";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Guided plans — meals & movement that fit your life",
   description:
     "Affordable, bodega-friendly meal plans and no-gym exercise plans — walking, home workouts, and chair exercises. Pick one and track your progress.",
-};
+  path: "/plans",
+});
 
 const FILTERS = [
   { key: "all", label: "All plans" },

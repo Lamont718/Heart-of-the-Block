@@ -11,6 +11,7 @@ export function toolsLinks(t: ReturnType<typeof useT>["t"]) {
     { href: "/scan", emoji: "📷", label: t.footer.scanner },
     { href: "/tracker", emoji: "📈", label: t.footer.tracker },
     { href: "/swaps", emoji: "🔎", label: t.footer.swaps },
+    { href: "/heart-risk", emoji: "❤️", label: t.footer.heartRisk },
   ];
 }
 

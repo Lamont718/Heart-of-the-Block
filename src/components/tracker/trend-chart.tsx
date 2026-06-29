@@ -103,23 +103,23 @@ export function TrendChart({
           );
         })}
         {/* y range labels */}
-        <text x={padX} y={padY - 4} fontSize="9" fill="rgb(var(--muted-rgb))">
+        <text x={padX} y={padY - 4} fontSize="11" fill="rgb(var(--muted-rgb))">
           {Math.round(hi)}
           {unit}
         </text>
-        <text x={padX} y={H - padY + 11} fontSize="9" fill="rgb(var(--muted-rgb))">
+        <text x={padX} y={H - padY + 11} fontSize="11" fill="rgb(var(--muted-rgb))">
           {Math.round(lo)}
           {unit}
         </text>
         {/* x labels: first & last */}
-        <text x={padX} y={H - 2} fontSize="9" fill="rgb(var(--muted-rgb))">
+        <text x={padX} y={H - 2} fontSize="11" fill="rgb(var(--muted-rgb))">
           {fmtDate(dates[0])}
         </text>
         {dates.length > 1 && (
           <text
             x={W - padX}
             y={H - 2}
-            fontSize="9"
+            fontSize="11"
             textAnchor="end"
             fill="rgb(var(--muted-rgb))"
           >

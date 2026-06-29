@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getArticles } from "@/lib/articles/articles";
 import { TOPIC_META, type TopicTag } from "@/lib/articles/types";
 import { ArticleCard } from "@/components/articles/article-card";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Learn — your favorites, made to love you back",
   description:
     "Short, plain-language reads on heart health, grounded in the food Brooklyn actually cooks. Cholesterol, blood pressure, salt, sugar, and more.",
-};
+  path: "/learn",
+});
 
 export const revalidate = 3600;
 

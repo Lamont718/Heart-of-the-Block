@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { PROGRAMS, PROGRAMS_LAST_CHECKED } from "@/data/produce-programs-seed";
 import { getLocale } from "@/i18n/server";
 import { MFP_CHROME, MFP_PROGRAMS } from "@/i18n/content/money-for-produce";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Money for Produce | Heart of the Block",
   description:
     "Real NYC programs that help you afford fruits and vegetables — Health Bucks, free produce boxes, SNAP, WIC and more. Who qualifies, what you get, and how to get it.",
-};
+  path: "/money-for-produce",
+});
 
 export default function MoneyForProducePage() {
   const locale = getLocale();

@@ -60,8 +60,9 @@ export function ListingCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="pill bg-cream text-ink" aria-hidden>
-              {cat.emoji} {cat.label}
+            <span className="pill bg-cream text-ink">
+              <span aria-hidden>{cat.emoji} </span>
+              {cat.label}
             </span>
             {!listing.verified && (
               <span
@@ -72,8 +73,20 @@ export function ListingCard({
               </span>
             )}
           </div>
-          <h3 className="mt-2 truncate font-display text-lg font-bold text-ink">
-            {listing.name}
+          {/* The name is a real button so keyboard & screen-reader users can
+              select the listing (which highlights it on the map). The whole-card
+              onClick above is a pointer-only convenience; onSelect is idempotent
+              so the bubbled double-call is harmless. */}
+          <h3 className="mt-2 font-display text-lg font-bold text-ink">
+            <button
+              type="button"
+              onClick={onSelect}
+              aria-pressed={selected}
+              aria-label={`${listing.name} — ${cat.label}. Highlight on the map.`}
+              className="block w-full truncate text-left hover:underline focus-visible:underline"
+            >
+              {listing.name}
+            </button>
           </h3>
           <p className="truncate text-sm text-muted">{listing.address}</p>
         </div>

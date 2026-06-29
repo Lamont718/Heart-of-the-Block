@@ -25,7 +25,7 @@ export function SiteFooter() {
               { href: "/swaps", label: t.footer.swaps },
               { href: "/scan", label: t.footer.scanner },
               { href: "/tracker", label: t.footer.tracker },
-              { href: "/#tools", label: t.footer.heartRisk },
+              { href: "/heart-risk", label: t.footer.heartRisk },
             ]}
           />
           <FooterCol
@@ -41,6 +41,8 @@ export function SiteFooter() {
           <FooterCol
             title={t.footer.aboutTitle}
             links={[
+              { href: "/about", label: t.footer.about },
+              { href: "/contact", label: t.footer.contact },
               { href: "/disclaimer", label: t.footer.disclaimerLink },
               { href: "/privacy", label: t.footer.privacy },
               { href: "/login", label: t.auth.signIn },

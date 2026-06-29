@@ -109,16 +109,19 @@ export default async function Home() {
               emoji="❤️"
               title="Heart-risk check"
               body="A clear picture of where you stand — always pointed back to a conversation with your doctor."
+              href="/heart-risk"
             />
             <FeatureCard
               emoji="👟"
               title="Activity check-ins"
               body="Log today’s walk or home workout. Build a streak. Keep yourself honest."
+              href="/community"
             />
             <FeatureCard
               emoji="🎯"
               title="Weight goals"
               body="Set a target, log your weight, watch the trend line. Encouraging — never a calorie diary."
+              href="/tracker?metric=weight"
             />
           </div>
         </div>

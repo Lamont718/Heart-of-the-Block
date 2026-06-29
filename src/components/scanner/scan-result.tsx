@@ -45,7 +45,9 @@ export function ScanResult({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={p.imageUrl}
-              alt=""
+              alt={`${p.name} packaging`}
+              loading="lazy"
+              decoding="async"
               className="h-20 w-20 rounded-xl border border-line object-contain"
             />
           ) : (
